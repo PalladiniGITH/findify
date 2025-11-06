@@ -62,20 +62,41 @@
     });
   </script>
   <header class="bg-deep-blue text-white">
-    <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+    <div class="relative mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
       <a href="#inicio" class="text-2xl font-serif tracking-wider text-white transition hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">
         FINDIFY
       </a>
-      <nav class="flex items-center gap-6 text-sm font-medium">
+      <button
+        type="button"
+        id="menuToggle"
+        class="inline-flex items-center justify-center rounded-full border border-white/20 p-2 text-white transition hover:border-gold hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold md:hidden"
+        aria-expanded="false"
+        aria-controls="primaryNav"
+      >
+        <span class="sr-only">Abrir menu</span>
+        <svg id="menuIcon" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+        <svg id="closeIcon" class="hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+      <nav
+        id="primaryNav"
+        class="absolute left-0 right-0 top-full z-30 hidden flex-col gap-4 border-t border-white/10 bg-deep-blue/95 px-6 pb-6 pt-4 text-sm font-medium shadow-soft md:static md:flex md:flex-row md:items-center md:gap-6 md:border-none md:bg-transparent md:px-0 md:pb-0 md:pt-0 md:shadow-none"
+      >
         <a href="#inicio" class="transition hover:text-olive focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">Início</a>
-        <a href="#briefing" class="rounded-full bg-olive px-4 py-2 text-deep-blue shadow-soft transition hover:bg-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">Começar</a>
+        <a href="#briefing" class="rounded-full bg-olive px-4 py-2 text-center text-deep-blue shadow-soft transition hover:bg-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">Começar</a>
       </nav>
     </div>
   </header>
 
   <main>
     <section id="inicio" class="hero-pattern">
-      <div class="mx-auto grid max-w-5xl gap-12 px-6 py-16 lg:grid-cols-2 lg:items-center">
+      <div class="mx-auto grid max-w-5xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:items-center">
         <div class="space-y-6">
           <p class="text-sm font-semibold uppercase tracking-[0.35em] text-olive">Consultoria Boutique</p>
           <h1 class="font-serif text-4xl font-bold text-deep-blue dark:text-white sm:text-5xl lg:text-6xl">Encontre o que é seu, do jeito certo.</h1>
@@ -109,7 +130,7 @@
         </div>
         <div class="mx-auto w-full max-w-md">
           <div class="rounded-3xl border border-olive/40 bg-white/70 p-6 shadow-soft backdrop-blur dark:bg-[#081a2f]/70">
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div class="rounded-2xl bg-olive/20 p-4 text-deep-blue">
                 <svg class="mx-auto h-12 w-12" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <path d="M24 8h16v12H24z" fill="currentColor" opacity="0.65" />
@@ -126,7 +147,7 @@
                 </svg>
                 <p class="mt-3 text-center text-sm font-semibold">Notebook ideal</p>
               </div>
-              <div class="col-span-2 rounded-2xl bg-deep-blue/90 p-5 text-white">
+              <div class="rounded-2xl bg-deep-blue/90 p-5 text-white sm:col-span-2">
                 <svg class="mx-auto h-14 w-14" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <path d="M14 42c0-8 6-14 14-14h8c8 0 14 6 14 14" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
                   <path d="M18 20a6 6 0 1112 0" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
@@ -142,7 +163,7 @@
     </section>
 
     <section id="briefing" class="bg-olive/10 py-16 dark:bg-[#0d1f36]">
-      <div class="mx-auto max-w-5xl px-6">
+      <div class="mx-auto max-w-5xl px-4 sm:px-6">
         <div class="mb-10 max-w-2xl">
           <p class="text-sm font-semibold uppercase tracking-[0.35em] text-olive">MVP Findify</p>
           <h2 class="font-serif text-3xl text-deep-blue dark:text-white sm:text-4xl">Briefing rápido</h2>
@@ -188,7 +209,7 @@
   </main>
 
   <footer class="bg-deep-blue py-10 text-white">
-    <div class="mx-auto flex max-w-5xl flex-col gap-4 px-6 text-sm sm:flex-row sm:items-center sm:justify-between">
+    <div class="mx-auto flex max-w-5xl flex-col gap-4 px-4 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6">
       <p class="text-white/80">&copy; <span id="year"></span> Findify. Todos os direitos reservados.</p>
       <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6">
         <a href="#" class="transition hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">Política de Privacidade</a>
@@ -198,7 +219,7 @@
     <p class="mt-6 text-center text-xs uppercase tracking-[0.3em] text-gold">Menos tempo procurando. Mais tempo aproveitando.</p>
   </footer>
 
-  <div id="toast" class="pointer-events-none fixed top-6 right-6 z-50 flex translate-x-full items-center gap-3 rounded-2xl bg-deep-blue px-5 py-3 text-sm font-semibold text-white shadow-lg opacity-0 transition-all duration-300" role="status" aria-live="assertive"></div>
+  <div id="toast" class="pointer-events-none fixed top-6 left-4 right-4 z-50 flex translate-x-full items-center gap-3 rounded-2xl bg-deep-blue px-5 py-3 text-sm font-semibold text-white shadow-lg opacity-0 transition-all duration-300 sm:left-auto sm:right-6" role="status" aria-live="assertive"></div>
 
   <script>
     const form = document.getElementById('briefForm');
@@ -211,11 +232,65 @@
     const toast = document.getElementById('toast');
     const budgetDisplay = document.getElementById('budgetDisplay');
     const whatsappButton = document.getElementById('whatsappButton');
+    const menuToggle = document.getElementById('menuToggle');
+    const primaryNav = document.getElementById('primaryNav');
+    const menuIcon = document.getElementById('menuIcon');
+    const closeIcon = document.getElementById('closeIcon');
     const whatsappNumber = '5541996860137'; // Número real configurado (substitua aqui para alterar o contato no formato 55DDDNÚMERO)
     const storageKey = 'findifyBriefData';
     let toastTimeout;
 
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    function setMenuOpen(isOpen) {
+      if (!primaryNav) return;
+      if (isOpen) {
+        primaryNav.classList.remove('hidden');
+        primaryNav.classList.add('flex');
+        menuToggle?.setAttribute('aria-expanded', 'true');
+        menuIcon?.classList.add('hidden');
+        closeIcon?.classList.remove('hidden');
+      } else {
+        primaryNav.classList.add('hidden');
+        primaryNav.classList.remove('flex');
+        menuToggle?.setAttribute('aria-expanded', 'false');
+        menuIcon?.classList.remove('hidden');
+        closeIcon?.classList.add('hidden');
+      }
+    }
+
+    menuToggle?.addEventListener('click', () => {
+      const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+      setMenuOpen(!isExpanded);
+    });
+
+    primaryNav?.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 768) {
+          setMenuOpen(false);
+        }
+      });
+    });
+
+    document.addEventListener('click', (event) => {
+      if (window.innerWidth >= 768) return;
+      const target = event.target;
+      if (!primaryNav?.contains(target) && !menuToggle?.contains(target)) {
+        setMenuOpen(false);
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        primaryNav?.classList.remove('hidden');
+        primaryNav?.classList.remove('flex');
+        menuToggle?.setAttribute('aria-expanded', 'false');
+        menuIcon?.classList.remove('hidden');
+        closeIcon?.classList.add('hidden');
+      } else {
+        setMenuOpen(false);
+      }
+    });
 
     function escapeHTML(value = '') {
       const stringValue = String(value);
