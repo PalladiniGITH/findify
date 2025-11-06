@@ -242,6 +242,56 @@
     const rapidApiBaseUrl = 'https://fragrancefinder.p.rapidapi.com';
     const rapidApiHost = 'fragrancefinder.p.rapidapi.com';
     const rapidApiKey = '984c793159msha2bee476bc45cfdp18e0b5jsn774465b770c1'; // Em produção, proteja esta chave usando um backend seguro.
+    const fallbackPerfumes = [
+      {
+        name: 'Libre Eau de Parfum',
+        brand: 'Yves Saint Laurent',
+        notes: 'Flor de laranjeira, lavanda, baunilha',
+        score: 'Curadoria Findify',
+        price: 'Referência internacional',
+        link: 'https://www.yslbeauty.com/libre-eau-de-parfum'
+      },
+      {
+        name: 'La Vie Est Belle',
+        brand: 'Lancôme',
+        notes: 'Íris, jasmim, praline',
+        score: 'Curadoria Findify',
+        price: 'Faixa premium',
+        link: 'https://www.lancome.com/la-vie-est-belle'
+      },
+      {
+        name: 'Good Girl',
+        brand: 'Carolina Herrera',
+        notes: 'Amêndoa, jasmim, fava tonka',
+        score: 'Curadoria Findify',
+        price: 'Faixa premium',
+        link: 'https://www.carolinaherrera.com/good-girl'
+      },
+      {
+        name: 'Eros Pour Femme',
+        brand: 'Versace',
+        notes: 'Limão siciliano, jasmim absoluto, musk',
+        score: 'Curadoria Findify',
+        price: 'Faixa premium',
+        link: 'https://www.versace.com/fragrances/eros-pour-femme'
+      },
+      {
+        name: 'Essencial Oud',
+        brand: 'Natura',
+        notes: 'Oud, especiarias quentes, patchouli',
+        score: 'Made in Brasil',
+        price: 'Faixa média',
+        link: 'https://www.natura.com.br/p/essencial-oud'
+      },
+      {
+        name: 'Kaiak Aero',
+        brand: 'Natura',
+        notes: 'Notas aquáticas, frescor cítrico',
+        score: 'Best-seller Brasil',
+        price: 'Faixa acessível',
+        link: 'https://www.natura.com.br/p/kaiak-aero'
+      }
+    ];
     let toastTimeout;
 
     document.getElementById('year').textContent = new Date().getFullYear();
@@ -398,6 +448,20 @@
       };
     }
 
+    function getFallbackSuggestions(query = '') {
+      if (!query) {
+        return fallbackPerfumes;
+      }
+      const normalizedQuery = query.trim().toLowerCase();
+      return fallbackPerfumes.filter((item) => {
+        const haystack = [item.name, item.brand, item.notes]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase();
+        return haystack.includes(normalizedQuery);
+      });
+    }
+
     function renderPerfumeResults(items) {
       if (!perfumeResults) return;
       perfumeResults.innerHTML = '';
@@ -450,8 +514,9 @@
         const response = await fetch(`${rapidApiBaseUrl}${endpoint}`, {
           method: 'GET',
           headers: {
-            'x-rapidapi-host': rapidApiHost,
-            'x-rapidapi-key': rapidApiKey
+            'Accept': 'application/json',
+            'X-RapidAPI-Host': rapidApiHost,
+            'X-RapidAPI-Key': rapidApiKey
           }
         });
 
@@ -497,8 +562,14 @@
         renderPerfumeResults([]);
         const searchResults = await searchPerfumeByName(query);
         if (!searchResults.length) {
-          setPerfumeStatus('Não encontramos esse perfume. Tente outro nome ou ajuste a grafia.', true);
-          renderPerfumeResults([]);
+          const fallback = getFallbackSuggestions(query);
+          if (fallback.length) {
+            setPerfumeStatus('Não encontramos esse perfume na API, mas separamos sugestões alinhadas ao seu pedido.', false);
+            renderPerfumeResults(fallback);
+          } else {
+            setPerfumeStatus('Não encontramos esse perfume. Tente outro nome ou ajuste a grafia.', true);
+            renderPerfumeResults([]);
+          }
           return;
         }
 
@@ -515,16 +586,28 @@
 
         const dupes = await fetchPerfumeDupes(perfumeId);
         if (!dupes.length) {
-          setPerfumeStatus(`Nenhuma alternativa encontrada para ${perfumeName}${perfumeBrand ? ` (${perfumeBrand})` : ''}.`, true);
-          renderPerfumeResults([]);
+          const fallback = getFallbackSuggestions(query);
+          if (fallback.length) {
+            setPerfumeStatus(`Ainda não temos alternativas para ${perfumeName}${perfumeBrand ? ` (${perfumeBrand})` : ''}, mas veja inspirações parecidas da curadoria.`, false);
+            renderPerfumeResults(fallback);
+          } else {
+            setPerfumeStatus(`Nenhuma alternativa encontrada para ${perfumeName}${perfumeBrand ? ` (${perfumeBrand})` : ''}.`, true);
+            renderPerfumeResults([]);
+          }
           return;
         }
 
         setPerfumeStatus(`Alternativas ao perfume ${perfumeName}${perfumeBrand ? ` (${perfumeBrand})` : ''}:`, false);
         renderPerfumeResults(dupes);
       } catch (error) {
-        setPerfumeStatus('Não foi possível carregar as sugestões agora. Tente novamente em instantes.', true);
-        renderPerfumeResults([]);
+        const fallback = getFallbackSuggestions(query);
+        if (fallback.length) {
+          setPerfumeStatus('Mostrando inspirações do nosso acervo enquanto reconectamos à API.', false);
+          renderPerfumeResults(fallback);
+        } else {
+          setPerfumeStatus('Não foi possível carregar as sugestões agora. Tente novamente em instantes.', true);
+          renderPerfumeResults([]);
+        }
       }
     }
 
@@ -541,8 +624,14 @@
         setPerfumeStatus('Sugestões inspiradas em uma fragrância queridinha da comunidade.', false);
         renderPerfumeResults(dupes);
       } catch (error) {
-        setPerfumeStatus('Não foi possível carregar as inspirações iniciais. Faça uma busca personalizada quando quiser.', true);
-        renderPerfumeResults([]);
+        const fallback = getFallbackSuggestions();
+        if (fallback.length) {
+          setPerfumeStatus('Confira nossa curadoria base enquanto carregamos sugestões em tempo real.', false);
+          renderPerfumeResults(fallback);
+        } else {
+          setPerfumeStatus('Não foi possível carregar as inspirações iniciais. Faça uma busca personalizada quando quiser.', true);
+          renderPerfumeResults([]);
+        }
       }
     }
 
