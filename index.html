@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Findify — Consultoria de compras personalizadas</title>
+  <meta name="description" content="Findify conecta você às melhores opções de compra com uma curadoria personalizada em até 24 horas." />
+  <meta property="og:title" content="Findify — Consultoria de compras personalizadas" />
+  <meta property="og:description" content="Você nos diz o que busca — nós encontramos as melhores opções para você." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://findify.example.com" />
+  <meta property="og:image" content="https://findify.example.com/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Findify — Consultoria de compras personalizadas" />
+  <meta name="twitter:description" content="Você nos diz o que busca — nós encontramos as melhores opções para você." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'deep-blue': '#0B2545',
+            olive: '#A3B18A',
+            'muted-gray': '#6C757D',
+            gold: '#D4AF37'
+          },
+          fontFamily: {
+            sans: ['"Inter"', 'ui-sans-serif', 'system-ui'],
+            serif: ['"Playfair Display"', 'ui-serif', 'Georgia']
+          },
+          boxShadow: {
+            soft: '0 20px 45px -20px rgba(11, 37, 69, 0.45)'
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .hero-pattern {
+      background: radial-gradient(circle at top left, rgba(163, 177, 138, 0.18), transparent 55%),
+                  radial-gradient(circle at bottom right, rgba(212, 175, 55, 0.15), transparent 50%);
+    }
+  </style>
+</head>
+<body class="min-h-screen font-sans bg-white text-deep-blue transition-colors duration-300 dark:bg-[#050f1e] dark:text-white">
+  <script>
+    const rootElement = document.documentElement;
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+    if (prefersDark?.matches) {
+      rootElement.classList.add('dark');
+    }
+    prefersDark?.addEventListener('change', (event) => {
+      if (event.matches) {
+        rootElement.classList.add('dark');
+      } else {
+        rootElement.classList.remove('dark');
+      }
+    });
+  </script>
+  <header class="bg-deep-blue text-white">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+      <a href="#inicio" class="text-2xl font-serif tracking-wider text-white transition hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">
+        FINDIFY
+      </a>
+      <nav class="flex items-center gap-6 text-sm font-medium">
+        <a href="#inicio" class="transition hover:text-olive focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">Início</a>
+        <a href="#briefing" class="rounded-full bg-olive px-4 py-2 text-deep-blue shadow-soft transition hover:bg-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">Começar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="inicio" class="hero-pattern">
+      <div class="mx-auto grid max-w-5xl gap-12 px-6 py-16 lg:grid-cols-2 lg:items-center">
+        <div class="space-y-6">
+          <p class="text-sm font-semibold uppercase tracking-[0.35em] text-olive">Consultoria Boutique</p>
+          <h1 class="font-serif text-4xl font-bold text-deep-blue dark:text-white sm:text-5xl lg:text-6xl">Encontre o que é seu, do jeito certo.</h1>
+          <p class="max-w-xl text-lg text-muted-gray dark:text-gray-300">Você nos diz o que busca — nós encontramos as melhores opções para você.</p>
+          <div class="flex flex-wrap items-center gap-4">
+            <a href="#briefing" class="rounded-full bg-deep-blue px-6 py-3 font-semibold text-white shadow-soft transition hover:bg-gold hover:text-deep-blue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">Solicitar Curadoria</a>
+            <div class="flex items-center gap-2 text-sm text-muted-gray dark:text-gray-400">
+              <svg class="h-5 w-5 text-olive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 13l4 4L19 7" />
+              </svg>
+              Curadoria personalizada em até 24h
+            </div>
+          </div>
+        </div>
+        <div class="mx-auto w-full max-w-md">
+          <div class="rounded-3xl border border-olive/40 bg-white/70 p-6 shadow-soft backdrop-blur dark:bg-[#081a2f]/70">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="rounded-2xl bg-olive/20 p-4 text-deep-blue">
+                <svg class="mx-auto h-12 w-12" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M24 8h16v12H24z" fill="currentColor" opacity="0.65" />
+                  <path d="M20 20h24v30a8 8 0 01-8 8h-8a8 8 0 01-8-8z" fill="currentColor" />
+                  <circle cx="32" cy="34" r="6" fill="#0B2545" opacity="0.35" />
+                </svg>
+                <p class="mt-3 text-center text-sm font-semibold">Perfume exclusivo</p>
+              </div>
+              <div class="rounded-2xl bg-gold/15 p-4 text-deep-blue">
+                <svg class="mx-auto h-12 w-12" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="10" y="16" width="44" height="28" rx="4" fill="currentColor" />
+                  <rect x="16" y="44" width="32" height="6" rx="3" fill="currentColor" opacity="0.5" />
+                  <rect x="24" y="12" width="16" height="4" rx="2" fill="#0B2545" opacity="0.35" />
+                </svg>
+                <p class="mt-3 text-center text-sm font-semibold">Notebook ideal</p>
+              </div>
+              <div class="col-span-2 rounded-2xl bg-deep-blue/90 p-5 text-white">
+                <svg class="mx-auto h-14 w-14" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M14 42c0-8 6-14 14-14h8c8 0 14 6 14 14" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M18 20a6 6 0 1112 0" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M38 20a6 6 0 1112 0" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <p class="mt-4 text-center text-sm font-semibold uppercase tracking-[0.2em] text-gold">Curadoria Findify</p>
+                <p class="mt-2 text-center text-xs text-gold/80">Produtos sob medida para o seu estilo</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="briefing" class="bg-olive/10 py-16 dark:bg-[#0d1f36]">
+      <div class="mx-auto max-w-5xl px-6">
+        <div class="mb-10 max-w-2xl">
+          <p class="text-sm font-semibold uppercase tracking-[0.35em] text-olive">MVP Findify</p>
+          <h2 class="font-serif text-3xl text-deep-blue dark:text-white sm:text-4xl">Briefing rápido</h2>
+          <p class="mt-3 text-base text-muted-gray dark:text-gray-300">Compartilhe suas preferências e deixe o resto com a nossa curadoria.</p>
+        </div>
+        <form id="briefForm" class="space-y-6" novalidate>
+          <div>
+            <label for="product" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">O que você quer comprar?</label>
+            <input type="text" id="product" name="product" required placeholder="Ex.: perfume, notebook, tênis..." class="w-full rounded-2xl border border-olive/50 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:bg-[#081a2f] dark:text-white" />
+          </div>
+          <div>
+            <label for="budget" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">Qual é o seu orçamento?</label>
+            <div class="relative">
+              <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-sm font-semibold text-deep-blue/70 dark:text-gray-200">R$</span>
+              <input type="number" id="budget" name="budget" required min="0" step="0.01" placeholder="0,00" class="w-full rounded-2xl border border-olive/50 bg-white pl-12 pr-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:bg-[#081a2f] dark:text-white" />
+            </div>
+            <p class="mt-2 text-sm text-muted-gray dark:text-gray-400">Valor formatado: <span id="budgetDisplay">R$ 0,00</span></p>
+          </div>
+          <div>
+            <label for="style" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">Estilo ou uso pretendido?</label>
+            <textarea id="style" name="style" required rows="3" placeholder="Conte em poucas palavras como imagina usar ou o estilo preferido." class="w-full rounded-2xl border border-olive/50 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:bg-[#081a2f] dark:text-white"></textarea>
+          </div>
+          <div>
+            <label for="brand" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">Já tem alguma marca em mente?</label>
+            <input type="text" id="brand" name="brand" placeholder="Se não tiver preferência, deixe em branco." class="w-full rounded-2xl border border-olive/50 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:bg-[#081a2f] dark:text-white" />
+          </div>
+          <div>
+            <label for="options" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">Quer que te mostremos até quantas opções?</label>
+            <select id="options" name="options" class="w-full rounded-2xl border border-olive/50 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:bg-[#081a2f] dark:text-white">
+              <option value="3" selected>3</option>
+              <option value="5">5</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+          <div class="flex flex-wrap gap-4 pt-2">
+            <button type="submit" class="flex-1 rounded-full bg-deep-blue px-6 py-3 text-center font-semibold text-white shadow-soft transition hover:bg-gold hover:text-deep-blue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold sm:flex-none">Enviar brief</button>
+            <button type="button" id="whatsappButton" class="flex-1 rounded-full border border-deep-blue px-6 py-3 text-center font-semibold text-deep-blue transition hover:border-gold hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold dark:border-olive dark:text-white dark:hover:border-gold dark:hover:text-gold sm:flex-none">Chamar no WhatsApp</button>
+          </div>
+        </form>
+        <div id="feedback" class="mt-8 rounded-2xl border border-olive/40 bg-white p-6 shadow-soft transition dark:bg-[#081a2f]" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-deep-blue py-10 text-white">
+    <div class="mx-auto flex max-w-5xl flex-col gap-4 px-6 text-sm sm:flex-row sm:items-center sm:justify-between">
+      <p class="text-white/80">&copy; <span id="year"></span> Findify. Todos os direitos reservados.</p>
+      <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6">
+        <a href="#" class="transition hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">Política de Privacidade</a>
+        <a href="mailto:contato@findify.com.br" class="transition hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">contato@findify.com.br</a>
+      </div>
+    </div>
+    <p class="mt-6 text-center text-xs uppercase tracking-[0.3em] text-gold">Menos tempo procurando. Mais tempo aproveitando.</p>
+  </footer>
+
+  <div id="toast" class="pointer-events-none fixed top-6 right-6 z-50 flex translate-x-full items-center gap-3 rounded-2xl bg-deep-blue px-5 py-3 text-sm font-semibold text-white shadow-lg opacity-0 transition-all duration-300" role="status" aria-live="assertive"></div>
+
+  <script>
+    const form = document.getElementById('briefForm');
+    const productInput = document.getElementById('product');
+    const budgetInput = document.getElementById('budget');
+    const styleInput = document.getElementById('style');
+    const brandInput = document.getElementById('brand');
+    const optionsSelect = document.getElementById('options');
+    const feedback = document.getElementById('feedback');
+    const toast = document.getElementById('toast');
+    const budgetDisplay = document.getElementById('budgetDisplay');
+    const whatsappButton = document.getElementById('whatsappButton');
+    const whatsappNumber = '55XXXXXXXXXXX'; // Substitua por um número real no formato 55DDDNÚMERO
+    const storageKey = 'findifyBriefData';
+    let toastTimeout;
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    function escapeHTML(value = '') {
+      const stringValue = String(value);
+      return stringValue
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function formatCurrency(value) {
+      if (!value || isNaN(value)) {
+        return '0,00';
+      }
+      return new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      }).format(Number(value)).replace('R$', '').trim();
+    }
+
+    function updateBudgetDisplay() {
+      const current = parseFloat(budgetInput.value.replace(',', '.'));
+      const sanitized = isNaN(current) ? 0 : current;
+      budgetDisplay.textContent = `R$ ${formatCurrency(sanitized)}`;
+    }
+
+    function getFormData() {
+      return {
+        product: productInput.value.trim(),
+        budget: budgetInput.value.trim(),
+        style: styleInput.value.trim(),
+        brand: brandInput.value.trim(),
+        options: optionsSelect.value
+      };
+    }
+
+    function persistData() {
+      const data = getFormData();
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(data));
+      } catch (error) {
+        console.warn('Não foi possível salvar o brief localmente.', error);
+      }
+    }
+
+    function restoreData() {
+      const saved = localStorage.getItem(storageKey);
+      if (!saved) return;
+      try {
+        const data = JSON.parse(saved);
+        if (data.product) productInput.value = data.product;
+        if (data.budget) budgetInput.value = data.budget;
+        if (data.style) styleInput.value = data.style;
+        if (data.brand) brandInput.value = data.brand;
+        if (data.options) optionsSelect.value = data.options;
+        updateBudgetDisplay();
+      } catch (error) {
+        console.error('Erro ao restaurar dados', error);
+      }
+    }
+
+    function buildWhatsAppMessage(data) {
+      const budgetValue = data.budget ? `R$ ${formatCurrency(parseFloat(data.budget.replace(',', '.')) || 0)}` : 'Não informado';
+      return [
+        'Olá, equipe Findify! Gostaria de solicitar uma curadoria personalizada.',
+        `O que desejo comprar: ${data.product || 'Não informado'}.`,
+        `Orçamento: ${budgetValue}.`,
+        `Estilo ou uso pretendido: ${data.style || 'Não informado'}.`,
+        `Marca preferida: ${data.brand || 'Sem preferência'}.`,
+        `Quantidade de opções: ${data.options || '3'}.`
+      ].join('\n');
+    }
+
+    function buildWhatsAppLink(message) {
+      const encodedMessage = encodeURIComponent(message);
+      return `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+    }
+
+    function showToast(message) {
+      if (toastTimeout) {
+        clearTimeout(toastTimeout);
+      }
+      toast.textContent = message;
+      toast.classList.remove('translate-x-full', 'opacity-0');
+      toast.classList.add('shadow-soft');
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('opacity-0');
+        toast.classList.add('translate-x-full');
+      }, 3000);
+    }
+
+    function displayFeedback(message, whatsappLink) {
+      const safeMessage = escapeHTML(message);
+      const safeSummary = escapeHTML(buildWhatsAppMessage(getFormData()));
+      const safeLink = escapeHTML(whatsappLink);
+      feedback.innerHTML = `
+        <div class="space-y-3">
+          <p class="text-base font-semibold text-deep-blue dark:text-white">${safeMessage}</p>
+          <div class="rounded-2xl bg-olive/15 p-4 text-sm text-deep-blue dark:text-gray-100">
+            <p class="font-semibold text-deep-blue dark:text-white">Resumo do brief:</p>
+            <pre class="mt-2 whitespace-pre-wrap font-sans text-sm leading-relaxed text-deep-blue dark:text-gray-200">${safeSummary}</pre>
+          </div>
+          <a href="${safeLink}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-full bg-olive px-5 py-2 font-semibold text-deep-blue transition hover:bg-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">
+            Enviar pelo WhatsApp
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14" />
+              <path d="M12 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+      `;
+    }
+
+    form.addEventListener('input', (event) => {
+      if (event.target === budgetInput) {
+        updateBudgetDisplay();
+      }
+      persistData();
+    });
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      const data = getFormData();
+      const message = buildWhatsAppMessage(data);
+      const whatsappLink = buildWhatsAppLink(message);
+      displayFeedback('Recebemos seu brief! Em até 24h enviamos sua curadoria.', whatsappLink);
+      showToast('Recebemos seu brief! Em até 24h enviamos sua curadoria.');
+    });
+
+    whatsappButton.addEventListener('click', () => {
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      const data = getFormData();
+      const message = buildWhatsAppMessage(data);
+      const whatsappLink = buildWhatsAppLink(message);
+      window.open(whatsappLink, '_blank');
+    });
+
+    restoreData();
+    updateBudgetDisplay();
+  </script>
+</body>
+</html>
