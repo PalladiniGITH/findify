@@ -239,9 +239,7 @@
     const whatsappNumber = '5541996860137'; // Número real configurado (substitua aqui para alterar o contato no formato 55DDDNÚMERO)
     const storageKey = 'findifyBriefData';
     const defaultPerfumeId = '66c70df571fb63515fcfdbcb';
-    const rapidApiBaseUrl = 'https://fragrancefinder.p.rapidapi.com';
-    const rapidApiHost = 'fragrancefinder.p.rapidapi.com';
-    const rapidApiKey = '984c793159msha2bee476bc45cfdp18e0b5jsn774465b770c1'; // Em produção, proteja esta chave usando um backend seguro.
+    const rapidApiProxyBaseUrl = '/api';
     const fallbackPerfumes = [
       {
         name: 'Libre Eau de Parfum',
@@ -511,22 +509,22 @@
 
     async function fetchFromRapidApi(endpoint) {
       try {
-        const response = await fetch(`${rapidApiBaseUrl}${endpoint}`, {
+        const response = await fetch(`${rapidApiProxyBaseUrl}${endpoint}`, {
           method: 'GET',
           headers: {
-            'Accept': 'application/json',
-            'X-RapidAPI-Host': rapidApiHost,
-            'X-RapidAPI-Key': rapidApiKey
-          }
+            'Accept': 'application/json'
+          },
+          cache: 'no-store'
         });
 
         if (!response.ok) {
-          throw new Error(`Erro na API (${response.status})`);
+          const errorText = await response.text();
+          throw new Error(`Erro no proxy da API (${response.status}): ${errorText}`);
         }
 
         return response.json();
       } catch (error) {
-        console.error('Erro ao chamar a Fragrance Finder API:', error);
+        console.error('Erro ao consultar o proxy da Fragrance Finder:', error);
         throw error;
       }
     }
