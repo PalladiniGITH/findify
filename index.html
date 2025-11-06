@@ -240,6 +240,16 @@
     const storageKey = 'findifyBriefData';
     const defaultPerfumeId = '66c70df571fb63515fcfdbcb';
     const rapidApiProxyBaseUrl = '/api';
+    const rapidApiHost = 'fragrancefinder.p.rapidapi.com';
+    const rapidApiDirectBaseUrl = `https://${rapidApiHost}`;
+    const rapidApiKeyFromConfig = window.FINDIFY_CONFIG?.rapidApiKey;
+    const rapidApiKey = rapidApiKeyFromConfig || '984c793159msha2bee476bc45cfdp18e0b5jsn774465b770c1'; // Substitua pela sua chave RapidAPI, se necessário.
+    const rapidApiDirectEnabled = window.FINDIFY_CONFIG?.directEnabled ?? true;
+    const staticHostHints = ['github.io', 'githubusercontent.com', 'netlify.app', 'vercel.app'];
+    const isStaticHosting = staticHostHints.some((domain) => window.location.hostname.endsWith(domain));
+    const preferDirect = window.FINDIFY_CONFIG?.apiMode === 'direct' || (!window.FINDIFY_CONFIG?.apiMode && isStaticHosting);
+    const preferProxy = window.FINDIFY_CONFIG?.apiMode === 'proxy' || (!preferDirect);
+    const canUseDirect = rapidApiDirectEnabled && Boolean(rapidApiKey);
     const fallbackPerfumes = [
       {
         name: 'Libre Eau de Parfum',
@@ -507,26 +517,77 @@
       });
     }
 
-    async function fetchFromRapidApi(endpoint) {
-      try {
-        const response = await fetch(`${rapidApiProxyBaseUrl}${endpoint}`, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json'
-          },
-          cache: 'no-store'
-        });
+    async function requestJson(url, options, contextLabel) {
+      const response = await fetch(url, options);
 
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Erro no proxy da API (${response.status}): ${errorText}`);
-        }
-
-        return response.json();
-      } catch (error) {
-        console.error('Erro ao consultar o proxy da Fragrance Finder:', error);
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => '');
+        const error = new Error(`${contextLabel} (${response.status})`);
+        error.status = response.status;
+        error.payload = errorText;
         throw error;
       }
+
+      return response.json();
+    }
+
+    async function fetchViaProxy(endpoint) {
+      return requestJson(`${rapidApiProxyBaseUrl}${endpoint}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json'
+        },
+        cache: 'no-store'
+      }, 'Erro ao consultar o proxy da API');
+    }
+
+    async function fetchDirectFromRapidApi(endpoint) {
+      if (!canUseDirect) {
+        throw new Error('Chave RapidAPI não configurada para chamadas diretas.');
+      }
+
+      return requestJson(`${rapidApiDirectBaseUrl}${endpoint}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'X-RapidAPI-Key': rapidApiKey,
+          'X-RapidAPI-Host': rapidApiHost
+        },
+        cache: 'no-store',
+        mode: 'cors'
+      }, 'Erro ao consultar a Fragrance Finder diretamente');
+    }
+
+    async function fetchFromRapidApi(endpoint) {
+      const attemptOrder = [];
+      if (preferDirect && canUseDirect) {
+        attemptOrder.push('direct');
+      }
+      if (preferProxy) {
+        attemptOrder.push('proxy');
+      }
+      if (!preferDirect && canUseDirect && !attemptOrder.includes('direct')) {
+        attemptOrder.push('direct');
+      }
+
+      const errors = [];
+
+      for (const mode of attemptOrder) {
+        try {
+          if (mode === 'proxy') {
+            return await fetchViaProxy(endpoint);
+          }
+          if (mode === 'direct') {
+            return await fetchDirectFromRapidApi(endpoint);
+          }
+        } catch (error) {
+          errors.push({ mode, error });
+          console.warn(`[Findify] Falha ao consultar ${mode === 'proxy' ? 'o proxy local' : 'a API direta'}:`, error);
+        }
+      }
+
+      const fallbackError = errors.length ? errors[errors.length - 1].error : new Error('Não foi possível contatar a Fragrance Finder.');
+      throw fallbackError;
     }
 
     function extractCollection(data) {
