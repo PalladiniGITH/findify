@@ -261,7 +261,9 @@
     const integrationEndpointRaw = form?.dataset?.submissionEndpoint?.trim() ?? '';
     const isPlaceholderEndpoint = !integrationEndpointRaw;
     const integrationEndpoint = isPlaceholderEndpoint ? '' : integrationEndpointRaw;
-    const integrationMode = form?.dataset?.submissionMode === 'no-cors' ? 'no-cors' : 'cors';
+    const integrationModeAttr = form?.dataset?.submissionMode?.toLowerCase() || 'auto';
+    const preferCors = integrationModeAttr !== 'no-cors';
+    const allowNoCors = integrationModeAttr !== 'cors-only';
     const integrationMethod = (form?.dataset?.submissionMethod || 'POST').toUpperCase();
     const submitButton = form?.querySelector('button[type="submit"]');
     const submitButtonOriginalText = submitButton?.textContent?.trim() ?? '';
@@ -512,30 +514,24 @@
       }
 
       const payload = createSpreadsheetPayload(data);
-      const isNoCors = integrationMode === 'no-cors';
-      const fetchOptions = {
-        method: integrationMethod,
-        credentials: 'omit',
-        mode: isNoCors ? 'no-cors' : 'cors'
-      };
-
-      if (isNoCors) {
-        const formData = new FormData();
-        Object.entries(payload).forEach(([key, value]) => {
-          formData.append(key, value ?? '');
-        });
-        fetchOptions.body = formData;
-      } else {
-        fetchOptions.headers = {
-          'Content-Type': 'application/json'
+      const attemptSubmission = async (mode) => {
+        const fetchOptions = {
+          method: integrationMethod,
+          credentials: 'omit',
+          mode,
+          body: JSON.stringify(payload)
         };
-        fetchOptions.body = JSON.stringify(payload);
-      }
 
-      try {
+        if (mode === 'cors') {
+          fetchOptions.headers = {
+            'Content-Type': 'text/plain;charset=UTF-8'
+          };
+        }
+
         const response = await fetch(integrationEndpoint, fetchOptions);
-        if (isNoCors) {
-          return { success: true, assumed: true };
+
+        if (mode === 'no-cors') {
+          return { success: true, assumed: true, mode };
         }
 
         if (!response.ok) {
@@ -544,19 +540,45 @@
         }
 
         let responseData = null;
-        try {
+        const contentType = response.headers.get('content-type') || '';
+
+        if (contentType.includes('application/json')) {
           responseData = await response.json();
-        } catch (error) {
-          responseData = null;
+        } else {
+          const text = await response.text().catch(() => '');
+          responseData = text ? { raw: text } : null;
         }
 
         if (responseData && responseData.ok === false) {
           throw new Error(responseData.error || 'A integração do Google Sheets retornou um erro.');
         }
 
-        return { success: true, data: responseData };
+        return { success: true, data: responseData, mode };
+      };
+
+      if (preferCors) {
+        try {
+          return await attemptSubmission('cors');
+        } catch (error) {
+          console.error('Falha ao registrar via modo CORS. Tentando fallback no-cors...', error);
+          if (!allowNoCors) {
+            return { success: false, error };
+          }
+
+          try {
+            const fallbackResult = await attemptSubmission('no-cors');
+            return { ...fallbackResult, fallbackError: error };
+          } catch (fallbackError) {
+            console.error('Fallback no-cors também falhou.', fallbackError);
+            return { success: false, error: fallbackError };
+          }
+        }
+      }
+
+      try {
+        return await attemptSubmission('no-cors');
       } catch (error) {
-        console.error('Erro ao registrar o brief no Google Sheets', error);
+        console.error('Erro ao registrar o brief no modo no-cors', error);
         return { success: false, error };
       }
     }
@@ -565,9 +587,13 @@
       if (result.success) {
         if (result.assumed) {
           return {
-            message: 'Solicitação enviada à planilha. Como a integração usa "no-cors", confirme o registro no Google Sheets em instantes.',
+            message: result.fallbackError
+              ? 'Solicitação enviada à planilha usando fallback "no-cors". Confirme o registro no Google Sheets em instantes.'
+              : 'Solicitação enviada à planilha. Como a integração usa "no-cors", confirme o registro no Google Sheets em instantes.',
             tone: 'info',
-            toastMessage: 'Recebemos seu brief e enviamos para a planilha. Confirme o registro no Google Sheets quando possível.'
+            toastMessage: result.fallbackError
+              ? 'Recebemos seu brief! Acionamos a planilha via fallback. Confira no Google Sheets em breve.'
+              : 'Recebemos seu brief e enviamos para a planilha. Confirme o registro no Google Sheets quando possível.'
           };
         }
 
