@@ -185,7 +185,6 @@
           class="space-y-6"
           novalidate
           data-submission-endpoint="https://script.google.com/macros/s/AKfycbzvjj8lWmI0P562j-sWqfyHUjrOWx1PfIhMeX4jq5StmOcP40WFLBmhgE5udRuKFUX1/exec"
-          data-submission-mode="cors"
         >
           <div>
             <label for="product" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">O que você quer comprar?</label>
@@ -261,9 +260,6 @@
     const integrationEndpointRaw = form?.dataset?.submissionEndpoint?.trim() ?? '';
     const isPlaceholderEndpoint = !integrationEndpointRaw;
     const integrationEndpoint = isPlaceholderEndpoint ? '' : integrationEndpointRaw;
-    const integrationModeAttr = form?.dataset?.submissionMode?.toLowerCase() || 'auto';
-    const preferCors = integrationModeAttr !== 'no-cors';
-    const allowNoCors = integrationModeAttr !== 'cors-only';
     const integrationMethod = (form?.dataset?.submissionMethod || 'POST').toUpperCase();
     const submitButton = form?.querySelector('button[type="submit"]');
     const submitButtonOriginalText = submitButton?.textContent?.trim() ?? '';
@@ -514,25 +510,17 @@
       }
 
       const payload = createSpreadsheetPayload(data);
-      const attemptSubmission = async (mode) => {
-        const fetchOptions = {
+
+      try {
+        const response = await fetch(integrationEndpoint, {
           method: integrationMethod,
           credentials: 'omit',
-          mode,
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
           body: JSON.stringify(payload)
-        };
-
-        if (mode === 'cors') {
-          fetchOptions.headers = {
-            'Content-Type': 'text/plain;charset=UTF-8'
-          };
-        }
-
-        const response = await fetch(integrationEndpoint, fetchOptions);
-
-        if (mode === 'no-cors') {
-          return { success: true, assumed: true, mode };
-        }
+        });
 
         if (!response.ok) {
           const errorText = await response.text().catch(() => '');
@@ -553,50 +541,15 @@
           throw new Error(responseData.error || 'A integração do Google Sheets retornou um erro.');
         }
 
-        return { success: true, data: responseData, mode };
-      };
-
-      if (preferCors) {
-        try {
-          return await attemptSubmission('cors');
-        } catch (error) {
-          console.error('Falha ao registrar via modo CORS. Tentando fallback no-cors...', error);
-          if (!allowNoCors) {
-            return { success: false, error };
-          }
-
-          try {
-            const fallbackResult = await attemptSubmission('no-cors');
-            return { ...fallbackResult, fallbackError: error };
-          } catch (fallbackError) {
-            console.error('Fallback no-cors também falhou.', fallbackError);
-            return { success: false, error: fallbackError };
-          }
-        }
-      }
-
-      try {
-        return await attemptSubmission('no-cors');
+        return { success: true, data: responseData };
       } catch (error) {
-        console.error('Erro ao registrar o brief no modo no-cors', error);
+        console.error('Erro ao registrar o brief no Google Sheets', error);
         return { success: false, error };
       }
     }
 
     function getSpreadsheetStatusDetails(result = {}) {
       if (result.success) {
-        if (result.assumed) {
-          return {
-            message: result.fallbackError
-              ? 'Solicitação enviada à planilha usando fallback "no-cors". Confirme o registro no Google Sheets em instantes.'
-              : 'Solicitação enviada à planilha. Como a integração usa "no-cors", confirme o registro no Google Sheets em instantes.',
-            tone: 'info',
-            toastMessage: result.fallbackError
-              ? 'Recebemos seu brief! Acionamos a planilha via fallback. Confira no Google Sheets em breve.'
-              : 'Recebemos seu brief e enviamos para a planilha. Confirme o registro no Google Sheets quando possível.'
-          };
-        }
-
         return {
           message: 'Registro automático concluído na planilha do Google Sheets via Google Apps Script.',
           tone: 'success',
