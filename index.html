@@ -184,7 +184,7 @@
           id="briefForm"
           class="space-y-6"
           novalidate
-          data-submission-endpoint="https://prod-00000.brazilsouth.logic.azure.com/workflows/6a550c03-bec0-4371-8f89-40ea81dec9fe/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=SEU_TOKEN_AQUI"
+          data-submission-endpoint="https://script.google.com/macros/s/AKfycbzvjj8lWmI0P562j-sWqfyHUjrOWx1PfIhMeX4jq5StmOcP40WFLBmhgE5udRuKFUX1/exec"
           data-submission-mode="cors"
         >
           <div>
@@ -272,14 +272,11 @@
     const closeIcon = document.getElementById('closeIcon');
     const whatsappNumber = '5541996860137'; // Número real configurado (substitua aqui para alterar o contato no formato 55DDDNÚMERO)
     const storageKey = 'findifyBriefData';
-    const sharepointEndpointRaw = form?.dataset?.submissionEndpoint?.trim() ?? '';
-    const isPlaceholderEndpoint =
-      !sharepointEndpointRaw ||
-      sharepointEndpointRaw.includes('SEU_TOKEN_AQUI') ||
-      sharepointEndpointRaw.includes('example.com');
-    const sharepointEndpoint = isPlaceholderEndpoint ? '' : sharepointEndpointRaw;
-    const sharepointMode = form?.dataset?.submissionMode === 'no-cors' ? 'no-cors' : 'cors';
-    const sharepointMethod = (form?.dataset?.submissionMethod || 'POST').toUpperCase();
+    const integrationEndpointRaw = form?.dataset?.submissionEndpoint?.trim() ?? '';
+    const isPlaceholderEndpoint = !integrationEndpointRaw;
+    const integrationEndpoint = isPlaceholderEndpoint ? '' : integrationEndpointRaw;
+    const integrationMode = form?.dataset?.submissionMode === 'no-cors' ? 'no-cors' : 'cors';
+    const integrationMethod = (form?.dataset?.submissionMethod || 'POST').toUpperCase();
     const submitButton = form?.querySelector('button[type="submit"]');
     const submitButtonOriginalText = submitButton?.textContent?.trim() ?? '';
     let toastTimeout;
@@ -501,35 +498,26 @@
     }
 
     async function submitBriefToSpreadsheet(data) {
-      if (!sharepointEndpoint) {
+      if (!integrationEndpoint) {
         return { success: false, skipped: true };
       }
 
       const payload = createSpreadsheetPayload(data);
+      const formData = new FormData();
+      Object.entries(payload).forEach(([key, value]) => {
+        formData.append(key, value ?? '');
+      });
+
       const fetchOptions = {
-        method: sharepointMethod,
-        credentials: 'include'
+        method: integrationMethod,
+        credentials: 'omit',
+        body: formData,
+        mode: integrationMode === 'no-cors' ? 'no-cors' : 'cors'
       };
 
       try {
-        if (sharepointMode === 'no-cors') {
-          const formData = new FormData();
-          Object.entries(payload).forEach(([key, value]) => {
-            formData.append(key, value ?? '');
-          });
-          fetchOptions.body = formData;
-          fetchOptions.mode = 'no-cors';
-        } else {
-          fetchOptions.headers = {
-            'Content-Type': 'application/json'
-          };
-          fetchOptions.body = JSON.stringify(payload);
-          fetchOptions.mode = 'cors';
-        }
-
-        const response = await fetch(sharepointEndpoint, fetchOptions);
-
-        if (sharepointMode === 'no-cors') {
+        const response = await fetch(integrationEndpoint, fetchOptions);
+        if (integrationMode === 'no-cors') {
           return { success: true, assumed: true };
         }
 
@@ -538,9 +526,16 @@
           throw new Error(errorText || `Resposta inválida (${response.status})`);
         }
 
-        return { success: true };
+        let responseData = null;
+        try {
+          responseData = await response.json();
+        } catch (error) {
+          responseData = null;
+        }
+
+        return { success: true, data: responseData };
       } catch (error) {
-        console.error('Erro ao registrar o brief na planilha', error);
+        console.error('Erro ao registrar o brief no Google Sheets', error);
         return { success: false, error };
       }
     }
@@ -549,31 +544,31 @@
       if (result.success) {
         if (result.assumed) {
           return {
-            message: 'Solicitação enviada à planilha. Como a integração usa "no-cors", confirme o registro no Excel em instantes.',
+            message: 'Solicitação enviada à planilha. Como a integração usa "no-cors", confirme o registro no Google Sheets em instantes.',
             tone: 'info',
-            toastMessage: 'Recebemos seu brief e enviamos para a planilha. Confirme o registro quando possível.'
+            toastMessage: 'Recebemos seu brief e enviamos para a planilha. Confirme o registro no Google Sheets quando possível.'
           };
         }
 
         return {
-          message: 'Registro automático concluído na planilha compartilhada.',
+          message: 'Registro automático concluído na planilha do Google Sheets.',
           tone: 'success',
-          toastMessage: 'Recebemos seu brief e ele já está na planilha!'
+          toastMessage: 'Recebemos seu brief e ele já está na planilha do Google Sheets!'
         };
       }
 
       if (result.skipped) {
         return {
-          message: 'Integração com a planilha ainda não foi configurada. Adicione o endpoint válido para registrar automaticamente.',
+          message: 'Integração com o Google Sheets ainda não foi configurada. Adicione o endpoint válido para registrar automaticamente.',
           tone: 'info',
-          toastMessage: 'Recebemos seu brief! Configure a integração com a planilha para salvar automaticamente.'
+          toastMessage: 'Recebemos seu brief! Configure a integração com o Google Sheets para salvar automaticamente.'
         };
       }
 
       return {
-        message: 'Recebemos seu brief, mas não foi possível registrar na planilha automaticamente. Tente novamente em instantes ou atualize o endpoint.',
+        message: 'Recebemos seu brief, mas não foi possível registrar no Google Sheets automaticamente. Tente novamente em instantes ou atualize o endpoint.',
         tone: 'error',
-        toastMessage: 'Recebemos seu brief, mas houve um problema ao registrar na planilha.'
+        toastMessage: 'Recebemos seu brief, mas houve um problema ao registrar no Google Sheets.'
       };
     }
 
