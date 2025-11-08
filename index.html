@@ -52,21 +52,21 @@
     }
   </style>
   <script>
-    (function invertThemePreference() {
+    (function syncThemeWithSystemPreference() {
       const rootElement = document.documentElement;
       const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
 
-      const applyInvertedTheme = (isDarkPreferred) => {
+      const applyTheme = (isDarkPreferred) => {
         if (isDarkPreferred) {
-          rootElement.classList.remove('dark');
+          rootElement.classList.add('dark');
           return;
         }
-        rootElement.classList.add('dark');
+        rootElement.classList.remove('dark');
       };
 
-      applyInvertedTheme(prefersDark?.matches ?? false);
+      applyTheme(prefersDark?.matches ?? false);
       prefersDark?.addEventListener('change', (event) => {
-        applyInvertedTheme(event.matches);
+        applyTheme(event.matches);
       });
     })();
   </script>
