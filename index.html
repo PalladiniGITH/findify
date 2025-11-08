@@ -186,6 +186,7 @@
           method="POST"
           target="hidden_iframe"
           class="space-y-6"
+          novalidate
         >
           <div class="grid gap-6 sm:grid-cols-2">
             <div>
@@ -198,26 +199,51 @@
             </div>
           </div>
           <div>
-            <label for="projeto" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">O que você quer comprar?</label>
-            <input type="text" id="projeto" name="projeto" placeholder="Ex.: perfume, notebook, tênis..." class="w-full rounded-2xl border border-deep-blue/10 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:border-olive/40 dark:bg-white/10 dark:text-white dark:placeholder:text-gray-400" />
+            <label for="product" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">O que você quer comprar?</label>
+            <input type="text" id="product" name="projeto" required placeholder="Ex.: perfume, notebook, tênis..." class="w-full rounded-2xl border border-deep-blue/10 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:border-olive/40 dark:bg-white/10 dark:text-white dark:placeholder:text-gray-400" />
           </div>
           <div>
-            <label for="orcamento" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">Qual é o seu orçamento?</label>
-            <input type="text" id="orcamento" name="orcamento" placeholder="Opcional" class="w-full rounded-2xl border border-deep-blue/10 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:border-olive/40 dark:bg-white/10 dark:text-white dark:placeholder:text-gray-400" />
+            <label for="budget" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">Qual é o seu orçamento?</label>
+            <div class="relative">
+              <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-sm font-semibold text-deep-blue/70 dark:text-gray-200">R$</span>
+              <input type="number" id="budget" name="orcamento" min="0" step="0.01" placeholder="0,00" class="w-full rounded-2xl border border-deep-blue/10 bg-white pl-12 pr-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:border-olive/40 dark:bg-white/10 dark:text-white dark:placeholder:text-gray-400" />
+            </div>
+            <p class="mt-2 text-sm text-muted-gray dark:text-gray-400">Valor formatado: <span id="budgetDisplay">R$ 0,00</span></p>
           </div>
           <div>
-            <label for="mensagem" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">Compartilhe detalhes importantes</label>
-            <textarea id="mensagem" name="mensagem" rows="4" placeholder="Contexto de uso, preferências, prazos..." class="w-full rounded-2xl border border-deep-blue/10 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:border-olive/40 dark:bg-white/10 dark:text-white dark:placeholder:text-gray-400"></textarea>
+            <label for="style" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">Estilo ou uso pretendido?</label>
+            <textarea id="style" name="mensagem" rows="3" required placeholder="Conte em poucas palavras como imagina usar ou o estilo preferido." class="w-full rounded-2xl border border-deep-blue/10 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:border-olive/40 dark:bg-white/10 dark:text-white dark:placeholder:text-gray-400"></textarea>
           </div>
-          <div class="pt-2">
-            <button type="submit" class="w-full rounded-full bg-deep-blue/90 px-6 py-3 text-center font-semibold text-white shadow-soft transition hover:bg-gold hover:text-deep-blue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold dark:bg-gold/90 dark:text-[#0b1730] sm:w-auto">Enviar brief</button>
+          <div>
+            <label for="brand" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">Já tem alguma marca em mente?</label>
+            <input type="text" id="brand" name="brand" placeholder="Se não tiver preferência, deixe em branco." class="w-full rounded-2xl border border-deep-blue/10 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:border-olive/40 dark:bg-white/10 dark:text-white dark:placeholder:text-gray-400" />
+          </div>
+          <div>
+            <label for="options" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">Quer que te mostremos até quantas opções?</label>
+            <select id="options" name="options" class="w-full rounded-2xl border border-deep-blue/10 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:border-olive/40 dark:bg-white/10 dark:text-white">
+              <option value="3" selected>3</option>
+              <option value="5">5</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+          <div class="flex flex-wrap gap-4 pt-2">
+            <button type="submit" class="flex-1 rounded-full bg-deep-blue px-6 py-3 text-center font-semibold text-white shadow-soft transition hover:bg-gold hover:text-deep-blue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold dark:bg-gold/90 dark:text-[#0b1730] sm:flex-none">Enviar brief</button>
+            <button type="button" id="whatsappButton" class="flex-1 rounded-full border border-deep-blue px-6 py-3 text-center font-semibold text-deep-blue transition hover:border-gold hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold dark:border-olive dark:text-white dark:hover:border-gold dark:hover:text-gold sm:flex-none">Chamar no WhatsApp</button>
           </div>
         </form>
         <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-        
+        <div id="feedback" class="mt-8 rounded-2xl border border-deep-blue/10 bg-white p-6 shadow-soft transition dark:border-olive/30 dark:bg-white/10" aria-live="polite"></div>
+
       </div>
     </section>
   </main>
+
+  <div
+    id="toast"
+    class="pointer-events-none fixed top-6 right-6 z-50 flex translate-x-full items-center gap-3 rounded-2xl bg-deep-blue px-5 py-3 text-sm font-semibold text-white shadow-lg opacity-0 transition-all duration-300"
+    role="status"
+    aria-live="assertive"
+  ></div>
 
   <footer class="bg-[#f0f4ff] py-10 text-deep-blue transition-colors dark:bg-[#0f1f3c] dark:text-white">
     <div class="mx-auto flex max-w-5xl flex-col gap-4 px-4 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6">
@@ -237,6 +263,22 @@
     const primaryNav = document.getElementById('primaryNav');
     const menuIcon = document.getElementById('menuIcon');
     const closeIcon = document.getElementById('closeIcon');
+    const toast = document.getElementById('toast');
+    const feedback = document.getElementById('feedback');
+    const nameInput = document.getElementById('nome');
+    const emailInput = document.getElementById('email');
+    const productInput = document.getElementById('product');
+    const budgetInput = document.getElementById('budget');
+    const styleInput = document.getElementById('style');
+    const brandInput = document.getElementById('brand');
+    const optionsSelect = document.getElementById('options');
+    const budgetDisplay = document.getElementById('budgetDisplay');
+    const whatsappButton = document.getElementById('whatsappButton');
+    const storageKey = 'findifyBriefData';
+    const whatsappNumber = '5541996860137';
+    let toastTimeout;
+    let formJustSubmitted = false;
+    let lastSubmissionData = null;
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -289,10 +331,197 @@
       }
     });
 
-    let formJustSubmitted = false;
+    function escapeHTML(value = '') {
+      const stringValue = String(value);
+      return stringValue
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
 
-    briefForm?.addEventListener('submit', () => {
+    function formatCurrency(value) {
+      if (value === '' || value === null || typeof value === 'undefined' || isNaN(Number(value))) {
+        return '0,00';
+      }
+      return new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      })
+        .format(Number(value))
+        .replace('R$', '')
+        .trim();
+    }
+
+    function updateBudgetDisplay() {
+      if (!budgetInput || !budgetDisplay) return;
+      const current = budgetInput.value ? parseFloat(String(budgetInput.value).replace(',', '.')) : 0;
+      const sanitized = isNaN(current) ? 0 : current;
+      budgetDisplay.textContent = `R$ ${formatCurrency(sanitized)}`;
+    }
+
+    function getFormData() {
+      return {
+        nome: nameInput?.value.trim() || '',
+        email: emailInput?.value.trim() || '',
+        product: productInput?.value.trim() || '',
+        budget: budgetInput?.value.trim() || '',
+        style: styleInput?.value.trim() || '',
+        brand: brandInput?.value.trim() || '',
+        options: optionsSelect?.value || '3'
+      };
+    }
+
+    function persistData() {
+      if (!window.localStorage) return;
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(getFormData()));
+      } catch (error) {
+        console.warn('Não foi possível salvar o brief localmente.', error);
+      }
+    }
+
+    function restoreData() {
+      if (!window.localStorage) return;
+      const saved = localStorage.getItem(storageKey);
+      if (!saved) return;
+      try {
+        const data = JSON.parse(saved);
+        if (data.nome && nameInput) nameInput.value = data.nome;
+        if (data.email && emailInput) emailInput.value = data.email;
+        if (data.product && productInput) productInput.value = data.product;
+        if (data.budget && budgetInput) budgetInput.value = data.budget;
+        if (data.style && styleInput) styleInput.value = data.style;
+        if (data.brand && brandInput) brandInput.value = data.brand;
+        if (data.options && optionsSelect) optionsSelect.value = data.options;
+      } catch (error) {
+        console.error('Erro ao restaurar dados do brief.', error);
+      }
+    }
+
+    function buildWhatsAppMessage(data) {
+      const budgetValue = data.budget ? `R$ ${formatCurrency(parseFloat(data.budget.replace(',', '.')) || 0)}` : 'Não informado';
+      const lines = [
+        'Olá, equipe Findify! Gostaria de solicitar uma curadoria personalizada.',
+        data.nome ? `Meu nome: ${data.nome}.` : 'Meu nome não foi informado.',
+        data.email ? `Contato por e-mail: ${data.email}.` : 'E-mail não informado.',
+        `O que desejo comprar: ${data.product || 'Não informado'}.`,
+        `Orçamento: ${budgetValue}.`,
+        `Estilo ou uso pretendido: ${data.style || 'Não informado'}.`,
+        `Marca preferida: ${data.brand || 'Sem preferência'}.`,
+        `Quantidade de opções desejada: ${data.options || '3'}.`
+      ];
+      return lines.join('\n');
+    }
+
+    function buildWhatsAppLink(message) {
+      const encodedMessage = encodeURIComponent(message);
+      return `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+    }
+
+    function showToast(message) {
+      if (!toast) return;
+      if (toastTimeout) {
+        clearTimeout(toastTimeout);
+      }
+      toast.textContent = message;
+      toast.classList.remove('translate-x-full', 'opacity-0');
+      toast.classList.add('shadow-soft');
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('opacity-0');
+        toast.classList.add('translate-x-full');
+      }, 3500);
+    }
+
+    function displayFeedback(statusMessage, whatsappLink, data) {
+      if (!feedback) return;
+      const safeMessage = escapeHTML(statusMessage);
+      const budgetValue = data.budget
+        ? `R$ ${formatCurrency(parseFloat(data.budget.replace(',', '.')) || 0)}`
+        : 'Não informado';
+      const summaryLines = [
+        `Nome: ${data.nome || 'Não informado'}`,
+        `E-mail: ${data.email || 'Não informado'}`,
+        `O que deseja comprar: ${data.product || 'Não informado'}`,
+        `Orçamento: ${budgetValue}`,
+        `Estilo ou uso pretendido: ${data.style || 'Não informado'}`,
+        `Marca preferida: ${data.brand || 'Sem preferência'}`,
+        `Quantidade de opções: ${data.options || '3'}`
+      ];
+      const safeSummary = escapeHTML(summaryLines.join('\n'));
+      const safeLink = escapeHTML(whatsappLink);
+
+      feedback.innerHTML = `
+        <div class="space-y-3">
+          <p class="text-base font-semibold text-deep-blue dark:text-white">${safeMessage}</p>
+          <div class="rounded-2xl bg-olive/15 p-4 text-sm text-deep-blue dark:bg-white/10 dark:text-gray-100">
+            <p class="font-semibold text-deep-blue dark:text-white">Resumo do brief:</p>
+            <pre class="mt-2 whitespace-pre-wrap font-sans text-sm leading-relaxed text-deep-blue dark:text-gray-200">${safeSummary}</pre>
+          </div>
+          <a
+            href="${safeLink}"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 rounded-full bg-olive px-5 py-2 font-semibold text-deep-blue transition hover:bg-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+          >
+            Enviar pelo WhatsApp
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14" />
+              <path d="M12 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+      `;
+    }
+
+    function setInitialFeedback() {
+      if (!feedback) return;
+      feedback.innerHTML = `
+        <p class="text-sm text-muted-gray dark:text-gray-300">
+          Preencha o brief para receber uma curadoria personalizada da Findify.
+        </p>
+      `;
+    }
+
+    setInitialFeedback();
+    restoreData();
+    updateBudgetDisplay();
+
+    briefForm?.addEventListener('input', (event) => {
+      if (event.target === budgetInput) {
+        updateBudgetDisplay();
+      }
+      persistData();
+    });
+
+    briefForm?.addEventListener('submit', (event) => {
+      if (!briefForm.checkValidity()) {
+        event.preventDefault();
+        briefForm.reportValidity();
+        return;
+      }
+
+      const data = getFormData();
+      lastSubmissionData = data;
+      const message = buildWhatsAppMessage(data);
+      const whatsappLink = buildWhatsAppLink(message);
+      displayFeedback('Enviando seu brief para nossa equipe...', whatsappLink, data);
+      showToast('Enviando seu brief...');
+      persistData();
       formJustSubmitted = true;
+    });
+
+    whatsappButton?.addEventListener('click', () => {
+      if (!briefForm) return;
+      if (!briefForm.checkValidity()) {
+        briefForm.reportValidity();
+        return;
+      }
+      const data = getFormData();
+      const message = buildWhatsAppMessage(data);
+      const whatsappLink = buildWhatsAppLink(message);
+      window.open(whatsappLink, '_blank');
     });
 
     hiddenIframe?.addEventListener('load', () => {
@@ -300,8 +529,22 @@
         return;
       }
 
-      alert('Brief enviado!');
+      showToast('Brief enviado! Em breve entraremos em contato.');
+
+      if (lastSubmissionData) {
+        const message = buildWhatsAppMessage(lastSubmissionData);
+        const whatsappLink = buildWhatsAppLink(message);
+        displayFeedback('Brief enviado! Em até 24h retornamos com sua curadoria.', whatsappLink, lastSubmissionData);
+      }
+
+      try {
+        localStorage.removeItem(storageKey);
+      } catch (error) {
+        console.warn('Não foi possível limpar os dados salvos do brief.', error);
+      }
+
       briefForm?.reset();
+      updateBudgetDisplay();
       formJustSubmitted = false;
     });
   </script>
