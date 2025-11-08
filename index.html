@@ -182,43 +182,38 @@
         </div>
         <form
           id="briefForm"
+          action="https://script.google.com/macros/s/AKfycbzvjj8lWmI0P562j-sWqfyHUjrOWx1PfIhMeX4jq5StmOcP40WFLBmhgE5udRuKFUX1/exec"
+          method="POST"
+          target="hidden_iframe"
           class="space-y-6"
-          novalidate
         >
-          <div>
-            <label for="product" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">O que você quer comprar?</label>
-            <input type="text" id="product" name="product" required placeholder="Ex.: perfume, notebook, tênis..." class="w-full rounded-2xl border border-deep-blue/10 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:border-olive/40 dark:bg-white/10 dark:text-white dark:placeholder:text-gray-400" />
-          </div>
-          <div>
-            <label for="budget" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">Qual é o seu orçamento?</label>
-            <div class="relative">
-              <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-sm font-semibold text-deep-blue/70 dark:text-gray-200">R$</span>
-              <input type="number" id="budget" name="budget" required min="0" step="0.01" placeholder="0,00" class="w-full rounded-2xl border border-deep-blue/10 bg-white pl-12 pr-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:border-olive/40 dark:bg-white/10 dark:text-white dark:placeholder:text-gray-400" />
+          <div class="grid gap-6 sm:grid-cols-2">
+            <div>
+              <label for="nome" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">Seu nome</label>
+              <input type="text" id="nome" name="nome" required placeholder="Como devemos te chamar?" class="w-full rounded-2xl border border-deep-blue/10 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:border-olive/40 dark:bg-white/10 dark:text-white dark:placeholder:text-gray-400" />
             </div>
-            <p class="mt-2 text-sm text-muted-gray dark:text-gray-400">Valor formatado: <span id="budgetDisplay">R$ 0,00</span></p>
+            <div>
+              <label for="email" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">E-mail</label>
+              <input type="email" id="email" name="email" required placeholder="seu@email.com" class="w-full rounded-2xl border border-deep-blue/10 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:border-olive/40 dark:bg-white/10 dark:text-white dark:placeholder:text-gray-400" />
+            </div>
           </div>
           <div>
-            <label for="style" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">Estilo ou uso pretendido?</label>
-            <textarea id="style" name="style" required rows="3" placeholder="Conte em poucas palavras como imagina usar ou o estilo preferido." class="w-full rounded-2xl border border-deep-blue/10 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:border-olive/40 dark:bg-white/10 dark:text-white dark:placeholder:text-gray-400"></textarea>
+            <label for="projeto" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">O que você quer comprar?</label>
+            <input type="text" id="projeto" name="projeto" placeholder="Ex.: perfume, notebook, tênis..." class="w-full rounded-2xl border border-deep-blue/10 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:border-olive/40 dark:bg-white/10 dark:text-white dark:placeholder:text-gray-400" />
           </div>
           <div>
-            <label for="brand" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">Já tem alguma marca em mente?</label>
-            <input type="text" id="brand" name="brand" placeholder="Se não tiver preferência, deixe em branco." class="w-full rounded-2xl border border-deep-blue/10 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:border-olive/40 dark:bg-white/10 dark:text-white dark:placeholder:text-gray-400" />
+            <label for="orcamento" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">Qual é o seu orçamento?</label>
+            <input type="text" id="orcamento" name="orcamento" placeholder="Opcional" class="w-full rounded-2xl border border-deep-blue/10 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:border-olive/40 dark:bg-white/10 dark:text-white dark:placeholder:text-gray-400" />
           </div>
           <div>
-            <label for="options" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">Quer que te mostremos até quantas opções?</label>
-            <select id="options" name="options" class="w-full rounded-2xl border border-deep-blue/10 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:border-olive/40 dark:bg-white/10 dark:text-white dark:placeholder:text-gray-400">
-              <option value="3" selected>3</option>
-              <option value="5">5</option>
-              <option value="10">10</option>
-            </select>
+            <label for="mensagem" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">Compartilhe detalhes importantes</label>
+            <textarea id="mensagem" name="mensagem" rows="4" placeholder="Contexto de uso, preferências, prazos..." class="w-full rounded-2xl border border-deep-blue/10 bg-white px-4 py-3 text-base text-deep-blue shadow-sm transition focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/70 dark:border-olive/40 dark:bg-white/10 dark:text-white dark:placeholder:text-gray-400"></textarea>
           </div>
-          <div class="flex flex-wrap gap-4 pt-2">
-            <button type="submit" class="flex-1 rounded-full bg-deep-blue/90 px-6 py-3 text-center font-semibold text-white shadow-soft transition hover:bg-gold hover:text-deep-blue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold dark:bg-gold/90 dark:text-[#0b1730] sm:flex-none">Enviar brief</button>
-            <button type="button" id="whatsappButton" class="flex-1 rounded-full border border-deep-blue/20 px-6 py-3 text-center font-semibold text-deep-blue transition hover:border-gold hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold dark:border-olive/70 dark:text-white dark:hover:border-gold dark:hover:text-gold sm:flex-none">Chamar no WhatsApp</button>
+          <div class="pt-2">
+            <button type="submit" class="w-full rounded-full bg-deep-blue/90 px-6 py-3 text-center font-semibold text-white shadow-soft transition hover:bg-gold hover:text-deep-blue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold dark:bg-gold/90 dark:text-[#0b1730] sm:w-auto">Enviar brief</button>
           </div>
         </form>
-        <div id="feedback" class="mt-8 rounded-2xl border border-deep-blue/10 bg-white p-6 shadow-soft transition dark:border-olive/40 dark:bg-white/20 dark:backdrop-blur-xl" aria-live="polite"></div>
+        <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
         
       </div>
     </section>
@@ -235,32 +230,13 @@
     <p class="mt-6 text-center text-xs uppercase tracking-[0.3em] text-olive dark:text-gold">Menos tempo procurando. Mais tempo aproveitando.</p>
   </footer>
 
-  <div id="toast" class="pointer-events-none fixed top-6 left-4 right-4 z-50 flex translate-x-full items-center gap-3 rounded-2xl bg-deep-blue px-5 py-3 text-sm font-semibold text-white shadow-lg opacity-0 transition-all duration-300 dark:bg-[#173a6d] sm:left-auto sm:right-6" role="status" aria-live="assertive">
-
   <script>
-    const form = document.getElementById('briefForm');
-    const productInput = document.getElementById('product');
-    const budgetInput = document.getElementById('budget');
-    const styleInput = document.getElementById('style');
-    const brandInput = document.getElementById('brand');
-    const optionsSelect = document.getElementById('options');
-    const nameInput = form?.querySelector('input[name="name"]') || null;
-    const emailInput = form?.querySelector('input[name="email"]') || null;
-    const feedback = document.getElementById('feedback');
-    const toast = document.getElementById('toast');
-    const budgetDisplay = document.getElementById('budgetDisplay');
-    const whatsappButton = document.getElementById('whatsappButton');
+    const briefForm = document.getElementById('briefForm');
+    const hiddenIframe = document.getElementById('hidden_iframe');
     const menuToggle = document.getElementById('menuToggle');
     const primaryNav = document.getElementById('primaryNav');
     const menuIcon = document.getElementById('menuIcon');
     const closeIcon = document.getElementById('closeIcon');
-    const whatsappNumber = '5541996860137'; // Número real configurado (substitua aqui para alterar o contato no formato 55DDDNÚMERO)
-    const storageKey = 'findifyBriefData';
-    const SPREADSHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzvjj8lWmI0P562j-sWqfyHUjrOWx1PfIhMeX4jq5StmOcP40WFLBmhgE5udRuKFUX1/exec';
-    const hasSpreadsheetEndpoint = Boolean(SPREADSHEET_ENDPOINT);
-    const submitButton = form?.querySelector('button[type="submit"]');
-    const submitButtonOriginalText = submitButton?.textContent?.trim() ?? '';
-    let toastTimeout;
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -296,8 +272,7 @@
 
     document.addEventListener('click', (event) => {
       if (window.innerWidth >= 768) return;
-      const target = event.target;
-      if (!primaryNav?.contains(target) && !menuToggle?.contains(target)) {
+      if (!primaryNav?.contains(event.target) && !menuToggle?.contains(event.target)) {
         setMenuOpen(false);
       }
     });
@@ -314,326 +289,21 @@
       }
     });
 
-    function escapeHTML(value = '') {
-      const stringValue = String(value);
-      return stringValue
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
+    let formJustSubmitted = false;
 
-    function formatCurrency(value) {
-      if (!value || isNaN(value)) {
-        return '0,00';
-      }
-      return new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-      }).format(Number(value)).replace('R$', '').trim();
-    }
-
-    function updateBudgetDisplay() {
-      const current = parseFloat(budgetInput.value.replace(',', '.'));
-      const sanitized = isNaN(current) ? 0 : current;
-      budgetDisplay.textContent = `R$ ${formatCurrency(sanitized)}`;
-    }
-
-    function getFormData() {
-      return {
-        name: nameInput ? nameInput.value.trim() : '',
-        email: emailInput ? emailInput.value.trim() : '',
-        product: productInput.value.trim(),
-        budget: budgetInput.value.trim(),
-        style: styleInput.value.trim(),
-        brand: brandInput.value.trim(),
-        options: optionsSelect.value
-      };
-    }
-
-    function persistData() {
-      const data = getFormData();
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(data));
-      } catch (error) {
-        console.warn('Não foi possível salvar o brief localmente.', error);
-      }
-    }
-
-    function clearPersistedData() {
-      try {
-        localStorage.removeItem(storageKey);
-      } catch (error) {
-        console.warn('Não foi possível limpar o brief salvo localmente.', error);
-      }
-    }
-
-    function restoreData() {
-      const saved = localStorage.getItem(storageKey);
-      if (!saved) return;
-      try {
-        const data = JSON.parse(saved);
-        if (data.product) productInput.value = data.product;
-        if (data.budget) budgetInput.value = data.budget;
-        if (data.style) styleInput.value = data.style;
-        if (data.brand) brandInput.value = data.brand;
-        if (data.options) optionsSelect.value = data.options;
-        if (data.name && nameInput) nameInput.value = data.name;
-        if (data.email && emailInput) emailInput.value = data.email;
-        updateBudgetDisplay();
-      } catch (error) {
-        console.error('Erro ao restaurar dados', error);
-      }
-    }
-
-    function buildWhatsAppMessage(data) {
-      const budgetValue = data.budget ? `R$ ${formatCurrency(parseFloat(data.budget.replace(',', '.')) || 0)}` : 'Não informado';
-      return [
-        'Olá, equipe Findify! Gostaria de solicitar uma curadoria personalizada.',
-        data.name ? `Nome: ${data.name}.` : null,
-        data.email ? `E-mail: ${data.email}.` : null,
-        `O que desejo comprar: ${data.product || 'Não informado'}.`,
-        `Orçamento: ${budgetValue}.`,
-        `Estilo ou uso pretendido: ${data.style || 'Não informado'}.`,
-        `Marca preferida: ${data.brand || 'Sem preferência'}.`,
-        `Quantidade de opções: ${data.options || '3'}.`
-      ]
-        .filter(Boolean)
-        .join('\n');
-    }
-
-    function buildWhatsAppLink(message) {
-      const encodedMessage = encodeURIComponent(message);
-      return `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-    }
-
-    function showToast(message) {
-      if (toastTimeout) {
-        clearTimeout(toastTimeout);
-      }
-      toast.textContent = message;
-      toast.classList.remove('translate-x-full', 'opacity-0');
-      toast.classList.add('shadow-soft');
-      toastTimeout = setTimeout(() => {
-        toast.classList.add('opacity-0');
-        toast.classList.add('translate-x-full');
-      }, 3000);
-    }
-
-    function buildStatusMarkup(status) {
-      if (!status?.message) {
-        return '';
-      }
-
-      const tone = status.tone || 'info';
-      const safeMessage = escapeHTML(status.message);
-      let iconMarkup = '';
-      let toneClass = 'text-sky-700 dark:text-sky-300';
-
-      if (tone === 'success') {
-        toneClass = 'text-emerald-700 dark:text-emerald-300';
-        iconMarkup = '<path d="M5 13l4 4L19 7" />';
-      } else if (tone === 'error') {
-        toneClass = 'text-amber-700 dark:text-amber-300';
-        iconMarkup = '<path d="M18 6L6 18M6 6l12 12" />';
-      } else {
-        iconMarkup = '<circle cx="12" cy="12" r="10" opacity="0.25" /><path d="M12 8v4m0 4h.01" />';
-      }
-
-      return `
-        <div class="flex items-center gap-2 text-sm ${toneClass}">
-          <svg class="h-4 w-4 flex-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            ${iconMarkup}
-          </svg>
-          ${safeMessage}
-        </div>
-      `;
-    }
-
-    function displayFeedback(message, whatsappLink, data, statusDetails = {}) {
-      const safeMessage = escapeHTML(message);
-      const safeSummary = escapeHTML(buildWhatsAppMessage(data));
-      const safeLink = escapeHTML(whatsappLink);
-      const statusMarkup = buildStatusMarkup(statusDetails);
-      feedback.innerHTML = `
-        <div class="space-y-3">
-          <p class="text-base font-semibold text-deep-blue dark:text-white">${safeMessage}</p>
-          ${statusMarkup}
-          <div class="rounded-2xl bg-olive/15 p-4 text-sm text-deep-blue dark:text-gray-100">
-            <p class="font-semibold text-deep-blue dark:text-white">Resumo do brief:</p>
-            <pre class="mt-2 whitespace-pre-wrap font-sans text-sm leading-relaxed text-deep-blue dark:text-gray-200">${safeSummary}</pre>
-          </div>
-          <a href="${safeLink}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-full bg-olive px-5 py-2 font-semibold text-deep-blue transition hover:bg-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">
-            Enviar pelo WhatsApp
-            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M5 12h14" />
-              <path d="M12 5l7 7-7 7" />
-            </svg>
-          </a>
-        </div>
-      `;
-    }
-
-    function createSpreadsheetPayload(data) {
-      const resumoMensagem = [
-        data.style ? `Estilo/uso: ${data.style}` : null,
-        data.brand ? `Marca: ${data.brand}` : null,
-        data.options ? `Qtd opções: ${data.options}` : null
-      ]
-        .filter(Boolean)
-        .join(' | ');
-
-      const numericBudget = Number(
-        typeof data.budget === 'string'
-          ? data.budget.replace(',', '.')
-          : data.budget
-      );
-      const budgetForSheet = Number.isFinite(numericBudget) ? numericBudget : data.budget;
-
-      return {
-        nome: data.name || '',
-        email: data.email || '',
-        projeto: data.product,
-        orcamento: budgetForSheet ?? '',
-        mensagem: resumoMensagem || 'Detalhes não informados',
-        submittedAt: new Date().toISOString()
-      };
-    }
-
-    async function submitBriefToSpreadsheet(data) {
-      if (!hasSpreadsheetEndpoint) {
-        return { success: false, skipped: true };
-      }
-
-      const payload = createSpreadsheetPayload(data);
-
-      try {
-        const response = await fetch(SPREADSHEET_ENDPOINT, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json'
-          },
-          body: JSON.stringify(payload)
-        });
-
-        let responseData = null;
-
-        try {
-          responseData = await response.json();
-        } catch (parseError) {
-          throw new Error('Não foi possível interpretar a resposta do Google Sheets.');
-        }
-
-        if (!response.ok || responseData?.ok !== true) {
-          const responseErrorMessage =
-            typeof responseData?.error === 'string' && responseData.error.trim()
-              ? responseData.error
-              : `Falha ao registrar o brief no Google Sheets (status ${response.status}).`;
-          throw new Error(responseErrorMessage);
-        }
-
-        return { success: true, data: responseData };
-      } catch (error) {
-        console.error('Erro ao registrar o brief no Google Sheets', error);
-        return { success: false, error };
-      }
-    }
-
-    function getSpreadsheetStatusDetails(result = {}) {
-      if (result.success) {
-        return {
-          message: 'Registro automático concluído na planilha do Google Sheets via Google Apps Script.',
-          tone: 'success',
-          toastMessage: 'Recebemos seu brief e ele já está na planilha do Google Sheets!'
-        };
-      }
-
-      if (result.skipped) {
-        return {
-          message: 'Integração com o Google Sheets ainda não foi configurada. Adicione o endpoint válido para registrar automaticamente.',
-          tone: 'info',
-          toastMessage: 'Recebemos seu brief! Configure a integração com o Google Sheets para salvar automaticamente.'
-        };
-      }
-
-      return {
-        message: `Recebemos seu brief, mas não foi possível registrar no Google Sheets automaticamente. Verifique o Google Apps Script e tente novamente.${
-          result?.error?.message
-            ? ` Detalhes: ${result.error.message}`
-            : typeof result?.error === 'string' && result.error.trim()
-            ? ` Detalhes: ${result.error.trim()}`
-            : ''
-        }`,
-        tone: 'error',
-        toastMessage: 'Recebemos seu brief, mas houve um problema ao registrar no Google Sheets.'
-      };
-    }
-
-    function setSubmitting(isSubmitting) {
-      if (!submitButton) return;
-      submitButton.disabled = isSubmitting;
-      submitButton.classList.toggle('cursor-not-allowed', isSubmitting);
-      submitButton.classList.toggle('opacity-70', isSubmitting);
-      if (isSubmitting) {
-        submitButton.textContent = 'Enviando...';
-      } else {
-        submitButton.textContent = submitButtonOriginalText || 'Enviar brief';
-      }
-    }
-
-    form.addEventListener('input', (event) => {
-      if (event.target === budgetInput) {
-        updateBudgetDisplay();
-      }
-      persistData();
+    briefForm?.addEventListener('submit', () => {
+      formJustSubmitted = true;
     });
 
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      if (!form.checkValidity()) {
-        form.reportValidity();
+    hiddenIframe?.addEventListener('load', () => {
+      if (!formJustSubmitted) {
         return;
       }
 
-      const data = getFormData();
-      const message = buildWhatsAppMessage(data);
-      const whatsappLink = buildWhatsAppLink(message);
-      setSubmitting(true);
-
-      let spreadsheetResult;
-
-      try {
-        spreadsheetResult = await submitBriefToSpreadsheet(data);
-      } finally {
-        setSubmitting(false);
-      }
-
-      const statusDetails = getSpreadsheetStatusDetails(spreadsheetResult);
-      displayFeedback('Recebemos seu brief! Em até 24h enviamos sua curadoria.', whatsappLink, data, statusDetails);
-      showToast(statusDetails.toastMessage || 'Recebemos seu brief! Em até 24h enviamos sua curadoria.');
-
-      if (spreadsheetResult?.success) {
-        clearPersistedData();
-        form.reset();
-        updateBudgetDisplay();
-      }
+      alert('Brief enviado!');
+      briefForm?.reset();
+      formJustSubmitted = false;
     });
-
-    whatsappButton.addEventListener('click', () => {
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-      }
-      const data = getFormData();
-      const message = buildWhatsAppMessage(data);
-      const whatsappLink = buildWhatsAppLink(message);
-      window.open(whatsappLink, '_blank');
-    });
-
-    restoreData();
-    updateBudgetDisplay();
   </script>
 </body>
 </html>
