@@ -221,23 +221,7 @@
           </div>
         </form>
         <div id="feedback" class="mt-8 rounded-2xl border border-deep-blue/10 bg-white p-6 shadow-soft transition dark:border-olive/40 dark:bg-white/20 dark:backdrop-blur-xl" aria-live="polite"></div>
-        <div class="mt-12 space-y-4">
-          <div>
-            <h3 class="text-xl font-semibold text-deep-blue dark:text-white">Planilha de acompanhamento</h3>
-            <p class="mt-1 text-sm text-muted-gray dark:text-gray-300">Os envios são registrados automaticamente e aparecem abaixo assim que o Excel online processa a solicitação.</p>
-          </div>
-          <div class="overflow-hidden rounded-3xl border border-deep-blue/10 shadow-soft dark:border-olive/40">
-            <iframe
-              title="Briefings Findify"
-              src="https://pucpredu-my.sharepoint.com/personal/gustavo_gasparelo_tecpuc_com_br/_layouts/15/Doc.aspx?sourcedoc={6a550c03-bec0-4371-8f89-40ea81dec9fe}&action=embedview&wdAllowInteractivity=False&wdHideGridlines=True&wdHideHeaders=True&wdDownloadButton=True&wdInConfigurator=True"
-              class="h-[420px] w-full"
-              frameborder="0"
-              scrolling="no"
-              loading="lazy"
-              allowfullscreen
-            ></iframe>
-          </div>
-        </div>
+        
       </div>
     </section>
   </main>
@@ -262,6 +246,8 @@
     const styleInput = document.getElementById('style');
     const brandInput = document.getElementById('brand');
     const optionsSelect = document.getElementById('options');
+    const nameInput = form?.querySelector('input[name="name"]') || null;
+    const emailInput = form?.querySelector('input[name="email"]') || null;
     const feedback = document.getElementById('feedback');
     const toast = document.getElementById('toast');
     const budgetDisplay = document.getElementById('budgetDisplay');
@@ -361,6 +347,8 @@
 
     function getFormData() {
       return {
+        name: nameInput ? nameInput.value.trim() : '',
+        email: emailInput ? emailInput.value.trim() : '',
         product: productInput.value.trim(),
         budget: budgetInput.value.trim(),
         style: styleInput.value.trim(),
@@ -396,6 +384,8 @@
         if (data.style) styleInput.value = data.style;
         if (data.brand) brandInput.value = data.brand;
         if (data.options) optionsSelect.value = data.options;
+        if (data.name && nameInput) nameInput.value = data.name;
+        if (data.email && emailInput) emailInput.value = data.email;
         updateBudgetDisplay();
       } catch (error) {
         console.error('Erro ao restaurar dados', error);
@@ -406,12 +396,16 @@
       const budgetValue = data.budget ? `R$ ${formatCurrency(parseFloat(data.budget.replace(',', '.')) || 0)}` : 'Não informado';
       return [
         'Olá, equipe Findify! Gostaria de solicitar uma curadoria personalizada.',
+        data.name ? `Nome: ${data.name}.` : null,
+        data.email ? `E-mail: ${data.email}.` : null,
         `O que desejo comprar: ${data.product || 'Não informado'}.`,
         `Orçamento: ${budgetValue}.`,
         `Estilo ou uso pretendido: ${data.style || 'Não informado'}.`,
         `Marca preferida: ${data.brand || 'Sem preferência'}.`,
         `Quantidade de opções: ${data.options || '3'}.`
-      ].join('\n');
+      ]
+        .filter(Boolean)
+        .join('\n');
     }
 
     function buildWhatsAppLink(message) {
@@ -487,12 +481,27 @@
     }
 
     function createSpreadsheetPayload(data) {
+      const resumoMensagem = [
+        data.style ? `Estilo/uso: ${data.style}` : null,
+        data.brand ? `Marca: ${data.brand}` : null,
+        data.options ? `Qtd opções: ${data.options}` : null
+      ]
+        .filter(Boolean)
+        .join(' | ');
+
+      const numericBudget = Number(
+        typeof data.budget === 'string'
+          ? data.budget.replace(',', '.')
+          : data.budget
+      );
+      const budgetForSheet = Number.isFinite(numericBudget) ? numericBudget : data.budget;
+
       return {
-        product: data.product,
-        budget: data.budget,
-        style: data.style,
-        brand: data.brand,
-        options: data.options,
+        nome: data.name || '',
+        email: data.email || '',
+        projeto: data.product,
+        orcamento: budgetForSheet ?? '',
+        mensagem: resumoMensagem || 'Detalhes não informados',
         submittedAt: new Date().toISOString()
       };
     }
@@ -503,21 +512,29 @@
       }
 
       const payload = createSpreadsheetPayload(data);
-      const formData = new FormData();
-      Object.entries(payload).forEach(([key, value]) => {
-        formData.append(key, value ?? '');
-      });
-
+      const isNoCors = integrationMode === 'no-cors';
       const fetchOptions = {
         method: integrationMethod,
         credentials: 'omit',
-        body: formData,
-        mode: integrationMode === 'no-cors' ? 'no-cors' : 'cors'
+        mode: isNoCors ? 'no-cors' : 'cors'
       };
+
+      if (isNoCors) {
+        const formData = new FormData();
+        Object.entries(payload).forEach(([key, value]) => {
+          formData.append(key, value ?? '');
+        });
+        fetchOptions.body = formData;
+      } else {
+        fetchOptions.headers = {
+          'Content-Type': 'application/json'
+        };
+        fetchOptions.body = JSON.stringify(payload);
+      }
 
       try {
         const response = await fetch(integrationEndpoint, fetchOptions);
-        if (integrationMode === 'no-cors') {
+        if (isNoCors) {
           return { success: true, assumed: true };
         }
 
@@ -531,6 +548,10 @@
           responseData = await response.json();
         } catch (error) {
           responseData = null;
+        }
+
+        if (responseData && responseData.ok === false) {
+          throw new Error(responseData.error || 'A integração do Google Sheets retornou um erro.');
         }
 
         return { success: true, data: responseData };
@@ -551,7 +572,7 @@
         }
 
         return {
-          message: 'Registro automático concluído na planilha do Google Sheets.',
+          message: 'Registro automático concluído na planilha do Google Sheets via Google Apps Script.',
           tone: 'success',
           toastMessage: 'Recebemos seu brief e ele já está na planilha do Google Sheets!'
         };
@@ -566,7 +587,7 @@
       }
 
       return {
-        message: 'Recebemos seu brief, mas não foi possível registrar no Google Sheets automaticamente. Tente novamente em instantes ou atualize o endpoint.',
+        message: 'Recebemos seu brief, mas não foi possível registrar no Google Sheets automaticamente. Verifique o Google Apps Script e tente novamente.',
         tone: 'error',
         toastMessage: 'Recebemos seu brief, mas houve um problema ao registrar no Google Sheets.'
       };
