@@ -184,7 +184,6 @@
           id="briefForm"
           class="space-y-6"
           novalidate
-          data-submission-endpoint="https://script.google.com/macros/s/AKfycbzvjj8lWmI0P562j-sWqfyHUjrOWx1PfIhMeX4jq5StmOcP40WFLBmhgE5udRuKFUX1/exec"
         >
           <div>
             <label for="product" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">O que você quer comprar?</label>
@@ -257,10 +256,8 @@
     const closeIcon = document.getElementById('closeIcon');
     const whatsappNumber = '5541996860137'; // Número real configurado (substitua aqui para alterar o contato no formato 55DDDNÚMERO)
     const storageKey = 'findifyBriefData';
-    const integrationEndpointRaw = form?.dataset?.submissionEndpoint?.trim() ?? '';
-    const isPlaceholderEndpoint = !integrationEndpointRaw;
-    const integrationEndpoint = isPlaceholderEndpoint ? '' : integrationEndpointRaw;
-    const integrationMethod = (form?.dataset?.submissionMethod || 'POST').toUpperCase();
+    const SPREADSHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzvjj8lWmI0P562j-sWqfyHUjrOWx1PfIhMeX4jq5StmOcP40WFLBmhgE5udRuKFUX1/exec';
+    const hasSpreadsheetEndpoint = Boolean(SPREADSHEET_ENDPOINT);
     const submitButton = form?.querySelector('button[type="submit"]');
     const submitButtonOriginalText = submitButton?.textContent?.trim() ?? '';
     let toastTimeout;
@@ -505,40 +502,36 @@
     }
 
     async function submitBriefToSpreadsheet(data) {
-      if (!integrationEndpoint) {
+      if (!hasSpreadsheetEndpoint) {
         return { success: false, skipped: true };
       }
 
       const payload = createSpreadsheetPayload(data);
 
       try {
-        const response = await fetch(integrationEndpoint, {
-          method: integrationMethod,
-          credentials: 'omit',
-          mode: 'cors',
+        const response = await fetch(SPREADSHEET_ENDPOINT, {
+          method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
           },
           body: JSON.stringify(payload)
         });
 
-        if (!response.ok) {
-          const errorText = await response.text().catch(() => '');
-          throw new Error(errorText || `Resposta inválida (${response.status})`);
-        }
-
         let responseData = null;
-        const contentType = response.headers.get('content-type') || '';
 
-        if (contentType.includes('application/json')) {
+        try {
           responseData = await response.json();
-        } else {
-          const text = await response.text().catch(() => '');
-          responseData = text ? { raw: text } : null;
+        } catch (parseError) {
+          throw new Error('Não foi possível interpretar a resposta do Google Sheets.');
         }
 
-        if (responseData && responseData.ok === false) {
-          throw new Error(responseData.error || 'A integração do Google Sheets retornou um erro.');
+        if (!response.ok || responseData?.ok !== true) {
+          const responseErrorMessage =
+            typeof responseData?.error === 'string' && responseData.error.trim()
+              ? responseData.error
+              : `Falha ao registrar o brief no Google Sheets (status ${response.status}).`;
+          throw new Error(responseErrorMessage);
         }
 
         return { success: true, data: responseData };
@@ -566,7 +559,13 @@
       }
 
       return {
-        message: 'Recebemos seu brief, mas não foi possível registrar no Google Sheets automaticamente. Verifique o Google Apps Script e tente novamente.',
+        message: `Recebemos seu brief, mas não foi possível registrar no Google Sheets automaticamente. Verifique o Google Apps Script e tente novamente.${
+          result?.error?.message
+            ? ` Detalhes: ${result.error.message}`
+            : typeof result?.error === 'string' && result.error.trim()
+            ? ` Detalhes: ${result.error.trim()}`
+            : ''
+        }`,
         tone: 'error',
         toastMessage: 'Recebemos seu brief, mas houve um problema ao registrar no Google Sheets.'
       };
