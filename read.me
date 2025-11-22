@@ -1,1 +1,14 @@
+# Findify WordPress integration
 
+1. Envie a pasta `wp-content/plugins/findify-briefs` para o seu WordPress (Hostinger) e ative o plugin **Findify Brief Form** no painel.
+2. Em qualquer página criada no editor de blocos, adicione um bloco **Shortcode** com o conteúdo:
+
+```
+<!-- wp:shortcode -->
+[findify_brief_form]
+<!-- /wp:shortcode -->
+```
+
+3. O formulário envia os dados para `admin-ajax.php`, salva os briefs em uma tabela dedicada (`wp_findify_briefs`) e retorna mensagens em JSON. O número de WhatsApp pode ser ajustado editando o valor `whatsappNumber` no `wp_localize_script` do plugin.
+
+O CSS e JS já são enfileirados pelo plugin para manter o mesmo comportamento de loading, feedback e link direto para o WhatsApp.

@@ -180,14 +180,7 @@
           <h2 class="font-serif text-3xl text-deep-blue dark:text-white sm:text-4xl">Briefing rápido</h2>
           <p class="mt-3 text-base text-muted-gray dark:text-gray-300">Compartilhe suas preferências e deixe o resto com a nossa curadoria.</p>
         </div>
-        <form
-          id="briefForm"
-          action="https://script.google.com/macros/s/AKfycbx06fjRC8bS6pQYAHNWNxextD835zxu70wzeJcP5YcD3DpL6ecwSMgHHhjEvoQSwVsw/exec"
-          method="POST"
-          target="hidden_iframe"
-          class="space-y-6"
-          novalidate
-        >
+        <form id="briefForm" action="submit.php" method="POST" class="space-y-6" novalidate>
           <div class="grid gap-6 sm:grid-cols-2">
             <div>
               <label for="nome" class="mb-2 block text-sm font-semibold text-deep-blue dark:text-gray-100">Seu nome</label>
@@ -227,11 +220,16 @@
             </select>
           </div>
           <div class="flex flex-wrap gap-4 pt-2">
-            <button type="submit" class="flex-1 rounded-full bg-deep-blue px-6 py-3 text-center font-semibold text-white shadow-soft transition hover:bg-gold hover:text-deep-blue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold dark:bg-gold/90 dark:text-[#0b1730] sm:flex-none">Enviar brief</button>
+            <button
+              type="submit"
+              id="submitButton"
+              class="flex-1 rounded-full bg-deep-blue px-6 py-3 text-center font-semibold text-white shadow-soft transition hover:bg-gold hover:text-deep-blue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold dark:bg-gold/90 dark:text-[#0b1730] sm:flex-none"
+            >
+              Enviar brief
+            </button>
             <button type="button" id="whatsappButton" class="flex-1 rounded-full border border-deep-blue px-6 py-3 text-center font-semibold text-deep-blue transition hover:border-gold hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold dark:border-olive dark:text-white dark:hover:border-gold dark:hover:text-gold sm:flex-none">Chamar no WhatsApp</button>
           </div>
         </form>
-        <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
         <div id="feedback" class="mt-8 rounded-2xl border border-deep-blue/10 bg-white p-6 shadow-soft transition dark:border-olive/30 dark:bg-white/10" aria-live="polite"></div>
 
       </div>
@@ -258,7 +256,6 @@
 
   <script>
     const briefForm = document.getElementById('briefForm');
-    const hiddenIframe = document.getElementById('hidden_iframe');
     const menuToggle = document.getElementById('menuToggle');
     const primaryNav = document.getElementById('primaryNav');
     const menuIcon = document.getElementById('menuIcon');
@@ -274,11 +271,10 @@
     const optionsSelect = document.getElementById('options');
     const budgetDisplay = document.getElementById('budgetDisplay');
     const whatsappButton = document.getElementById('whatsappButton');
+    const submitButton = document.getElementById('submitButton');
     const storageKey = 'findifyBriefData';
     const whatsappNumber = '5541996860137';
     let toastTimeout;
-    let formJustSubmitted = false;
-    let lastSubmissionData = null;
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -371,6 +367,13 @@
         brand: brandInput?.value.trim() || '',
         options: optionsSelect?.value || '3'
       };
+    }
+
+    function setSubmitting(isSubmitting) {
+      if (!submitButton) return;
+      submitButton.disabled = Boolean(isSubmitting);
+      submitButton.classList.toggle('opacity-60', Boolean(isSubmitting));
+      submitButton.textContent = isSubmitting ? 'Enviando...' : 'Enviar brief';
     }
 
     function persistData() {
@@ -495,21 +498,54 @@
       persistData();
     });
 
-    briefForm?.addEventListener('submit', (event) => {
+    briefForm?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
       if (!briefForm.checkValidity()) {
-        event.preventDefault();
         briefForm.reportValidity();
         return;
       }
 
       const data = getFormData();
-      lastSubmissionData = data;
       const message = buildWhatsAppMessage(data);
       const whatsappLink = buildWhatsAppLink(message);
+
       displayFeedback('Enviando seu brief para nossa equipe...', whatsappLink, data);
       showToast('Enviando seu brief...');
       persistData();
-      formJustSubmitted = true;
+      setSubmitting(true);
+
+      try {
+        const response = await fetch(briefForm.action || 'submit.php', {
+          method: 'POST',
+          body: new FormData(briefForm)
+        });
+
+        const payload = await response.json().catch(() => ({ success: false, message: 'Resposta inválida do servidor.' }));
+
+        if (!response.ok || !payload?.success) {
+          throw new Error(payload?.message || 'Não foi possível enviar seu brief.');
+        }
+
+        showToast(payload.message || 'Brief enviado!');
+        displayFeedback(payload.message || 'Brief enviado!', whatsappLink, data);
+
+        try {
+          localStorage.removeItem(storageKey);
+        } catch (error) {
+          console.warn('Não foi possível limpar os dados salvos do brief.', error);
+        }
+
+        briefForm.reset();
+        updateBudgetDisplay();
+      } catch (error) {
+        console.error('Erro ao enviar brief:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Erro ao enviar seu brief. Tente novamente.';
+        showToast('Falha ao enviar. Tente novamente.');
+        displayFeedback(errorMessage, whatsappLink, data);
+      } finally {
+        setSubmitting(false);
+      }
     });
 
     whatsappButton?.addEventListener('click', () => {
@@ -524,29 +560,6 @@
       window.open(whatsappLink, '_blank');
     });
 
-    hiddenIframe?.addEventListener('load', () => {
-      if (!formJustSubmitted) {
-        return;
-      }
-
-      showToast('Brief enviado! Em breve entraremos em contato.');
-
-      if (lastSubmissionData) {
-        const message = buildWhatsAppMessage(lastSubmissionData);
-        const whatsappLink = buildWhatsAppLink(message);
-        displayFeedback('Brief enviado! Em até 24h retornamos com sua curadoria.', whatsappLink, lastSubmissionData);
-      }
-
-      try {
-        localStorage.removeItem(storageKey);
-      } catch (error) {
-        console.warn('Não foi possível limpar os dados salvos do brief.', error);
-      }
-
-      briefForm?.reset();
-      updateBudgetDisplay();
-      formJustSubmitted = false;
-    });
   </script>
 </body>
 </html>

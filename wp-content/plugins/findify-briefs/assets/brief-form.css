@@ -1,0 +1,230 @@
+.findify-brief {
+  background: linear-gradient(135deg, #f5f7fb 0%, #ffffff 100%);
+  border: 1px solid rgba(11, 37, 69, 0.08);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 20px 45px -25px rgba(11, 37, 69, 0.35);
+  color: #0b2545;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.findify-brief__header {
+  margin-bottom: 20px;
+}
+
+.findify-brief__eyebrow {
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #a3b18a;
+  font-size: 12px;
+  margin: 0 0 6px;
+}
+
+.findify-brief__header h2 {
+  font-size: 26px;
+  margin: 0 0 6px;
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+.findify-brief__header p {
+  margin: 0;
+  color: #6c757d;
+}
+
+.findify-brief__form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.findify-brief__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.findify-brief__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-weight: 600;
+  color: #0b2545;
+}
+
+.findify-brief__field span {
+  font-size: 14px;
+}
+
+.findify-brief__field input,
+.findify-brief__field select,
+.findify-brief__field textarea {
+  border: 1px solid rgba(11, 37, 69, 0.12);
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 16px;
+  font-family: inherit;
+  color: #0b2545;
+  background-color: #ffffff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.findify-brief__field textarea {
+  resize: vertical;
+  min-height: 96px;
+}
+
+.findify-brief__field input:focus,
+.findify-brief__field select:focus,
+.findify-brief__field textarea:focus {
+  border-color: #d4af37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.25);
+  outline: none;
+}
+
+.findify-brief__money {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid rgba(11, 37, 69, 0.12);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+
+.findify-brief__money span {
+  font-weight: 700;
+  color: #0b2545;
+}
+
+.findify-brief__money input {
+  border: none;
+  flex: 1;
+  padding: 0;
+  outline: none;
+}
+
+.findify-brief__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.findify-brief__primary,
+.findify-brief__secondary {
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+  border: 1px solid transparent;
+  flex: 1;
+}
+
+.findify-brief__primary {
+  background: #0b2545;
+  color: #ffffff;
+  box-shadow: 0 12px 30px -14px rgba(11, 37, 69, 0.6);
+}
+
+.findify-brief__primary:hover {
+  transform: translateY(-1px);
+  background: #d4af37;
+  color: #0b2545;
+}
+
+.findify-brief__primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.findify-brief__secondary {
+  border-color: rgba(11, 37, 69, 0.18);
+  color: #0b2545;
+  background: #fff;
+}
+
+.findify-brief__secondary:hover {
+  border-color: #d4af37;
+  color: #d4af37;
+  transform: translateY(-1px);
+}
+
+.findify-brief__feedback {
+  margin-top: 16px;
+  border: 1px solid rgba(11, 37, 69, 0.1);
+  border-radius: 14px;
+  padding: 14px;
+  background: #ffffff;
+  color: #0b2545;
+  min-height: 52px;
+}
+
+.findify-brief__card {
+  display: grid;
+  gap: 10px;
+}
+
+.findify-brief__status {
+  margin: 0;
+  font-weight: 700;
+}
+
+.findify-brief__summary {
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #34425f;
+}
+
+.findify-brief__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  background: #a3b18a;
+  color: #0b2545;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  width: fit-content;
+}
+
+.findify-brief__link:hover {
+  background: #d4af37;
+  color: #0b2545;
+}
+
+.findify-brief__toast {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  background: #0b2545;
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 12px;
+  box-shadow: 0 12px 25px -12px rgba(0, 0, 0, 0.5);
+  transform: translateX(140%);
+  opacity: 0;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  z-index: 9999;
+}
+
+.findify-brief__toast.is-visible {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .findify-brief {
+    padding: 18px;
+  }
+
+  .findify-brief__actions {
+    flex-direction: column;
+  }
+}
